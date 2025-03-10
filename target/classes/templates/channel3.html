@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 14</title>
+    <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <!-- Message Display Area -->
+    <div id="messageDisplay" class="message-display"></div>
+
+    <!-- Chat Input Area -->
+    <div class="chat-container">
+        <textarea id="messageBox" rows="1" placeholder="Type a message..."></textarea>
+        <button id="sendButton">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <script src="/js/sendMessage.js"></script> <!-- Connects JavaScript file -->
+    
+    <div class="channel-selector">
+    	<button onclick="switchChannel('general')">General</button>
+    	<button onclick="switchChannel('channel1')">Channel 1</button>
+    	<button onclick="switchChannel('channel2')">Channel 2</button>
+    	<button onclick="switchChannel('channel3')">Channel 3</button>
+	</div>
+</body>
+</html>
+
