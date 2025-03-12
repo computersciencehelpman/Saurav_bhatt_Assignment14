@@ -1,55 +1,22 @@
 package com.coderscampus.Assignment14.repository;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.coderscampus.Assignment14.*;
 import org.springframework.stereotype.Repository;
+import java.util.*;
 
 @Repository
 public class MessageRepository {
-    
-    private static final String FILE_PREFIX = "A14messages_"; // Prefix for channel files
-    private static final String FILE_EXTENSION = ".txt"; // File extension
+    private final Map<String, List<Message>> messagesByChannel = new HashMap<>();
 
-    private String getFileName(String channel) {
-        return FILE_PREFIX + channel.replaceAll("\\s+", "_").toLowerCase() + FILE_EXTENSION;
+    public void saveMessage(String channel, String text) {
+        channel = channel.toLowerCase(); // Normalize channel names
+        messagesByChannel.putIfAbsent(channel, new ArrayList<>());
+        messagesByChannel.get(channel).add(new Message(channel, text));
+
+        System.out.println("Stored Messages in " + channel + ": " + messagesByChannel.get(channel));
     }
 
-    public void saveMessage(String channel, String message) {
-        String fileName = getFileName(channel);
-        System.out.println("Saving message to file: " + fileName); // Debugging line
-
-        try (FileWriter fw = new FileWriter(fileName, true);
-             BufferedWriter bw = new BufferedWriter(fw)) {
-            bw.write(message);
-            bw.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<String> getAllMessages(String channel) {
-        return loadMessagesFromFile(channel);
-    }
-
-    private List<String> loadMessagesFromFile(String channel) {
-        List<String> messages = new ArrayList<>();
-        String fileName = getFileName(channel);
-        File file = new File(fileName);
-        
-        if (file.exists()) {
-            System.out.println("Loading messages from " + fileName); // Debugging
-            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    messages.add(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("No messages yet for channel: " + channel); // Debugging
-        }
-        return messages;
+    public List<Message> getAllMessages(String channel) {
+        return messagesByChannel.getOrDefault(channel.toLowerCase(), new ArrayList<>());
     }
 }

@@ -1,5 +1,6 @@
 package com.coderscampus.Assignment14.service;
 
+import com.coderscampus.Assignment14.Message;
 import com.coderscampus.Assignment14.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,13 +13,11 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public void addMessage(String channel, String message) {
-        System.out.println("Adding message to channel: " + channel); // Debugging
-        messageRepository.saveMessage(channel, message);
+    public void addMessage(String channel, String text) {
+        messageRepository.saveMessage(channel.toLowerCase(), text);
     }
 
-    public List<String> getMessages(String channel) {
-        System.out.println("Fetching messages from channel: " + channel); // Debugging
-        return messageRepository.getAllMessages(channel);
+    public List<Message> getMessages(String channel) {
+        return messageRepository.getAllMessages(channel.toLowerCase());
     }
 }
