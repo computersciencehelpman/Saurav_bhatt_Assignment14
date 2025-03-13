@@ -4,6 +4,7 @@ import com.coderscampus.Assignment14.Message;
 import com.coderscampus.Assignment14.service.MessageService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,6 @@ public class MessageController {
         String text = payload.get("text");
         messageService.addMessage(channel, text);
     }
-
     
     @GetMapping("/all/{channel}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable String channel) {

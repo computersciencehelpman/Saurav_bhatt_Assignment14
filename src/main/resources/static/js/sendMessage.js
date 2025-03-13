@@ -42,11 +42,13 @@ async function loadMessages() {
 
 function switchChannel(channel) {
     console.log(`Switching to channel: ${channel}`); // Debugging
-    currentChannel = channel; // Update currentChannel
-    loadMessages(); // Reload messages for the selected channel
+    currentChannel = channel; // Update the current channel
+
+    // Store the selected channel in localStorage
+    localStorage.setItem("currentChannel", channel);
+
+    loadMessages(); // Load messages for the new channel
 }
-
-
 
 sendButton.addEventListener("click", sendMessage);
 messageBox.addEventListener("keydown", function(event) {
@@ -56,10 +58,12 @@ messageBox.addEventListener("keydown", function(event) {
     }
 });
 
-function switchChannel(channel) {
-    console.log(`Switching to channel: ${channel}`); // Debugging
-    currentChannel = channel;
-    loadMessages();
-}
+window.onload = function () {
+    let savedChannel = localStorage.getItem("currentChannel");
+    if (savedChannel) {
+        currentChannel = savedChannel;
+    }
 
-window.onload = loadMessages;
+    console.log("Loaded channel:", currentChannel); // Debugging
+    loadMessages();
+};
