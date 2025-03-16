@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class ChatController {
     @GetMapping("/{channel}")
     public String loadChannel(@PathVariable String channel, Model model) {
-        model.addAttribute("channel", channel);
+        model.addAttribute("channel", channel.toLowerCase()); // Normalize
         return "chat"; 
     }
 }

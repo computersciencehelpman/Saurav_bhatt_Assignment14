@@ -12,9 +12,9 @@ public class MessageRepository {
         channel = channel.toLowerCase(); // Normalize channel names
         messagesByChannel.putIfAbsent(channel, new ArrayList<>());
         messagesByChannel.get(channel).add(new Message(channel, text));
-
-        System.out.println("Stored Messages in " + channel + ": " + messagesByChannel.get(channel));
+        System.out.println("Stored Messages: " + messagesByChannel); // Debugging output
     }
+
 
     public List<Message> getAllMessages(String channel) {
         return messagesByChannel.getOrDefault(channel.toLowerCase(), new ArrayList<>());

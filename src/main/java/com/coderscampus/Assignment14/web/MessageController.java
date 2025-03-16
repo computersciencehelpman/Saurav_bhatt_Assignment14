@@ -28,7 +28,10 @@ public class MessageController {
     
     @GetMapping("/all/{channel}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable String channel) {
+        channel = channel.toLowerCase(); // Normalize
+        System.out.println("Fetching messages for channel: " + channel);
         List<Message> messages = messageService.getMessages(channel);
+        System.out.println("Messages returned: " + messages);
         return ResponseEntity.ok().body(messages);
     }
 
