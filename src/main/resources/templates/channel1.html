@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignment 14</title>
     <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
+    <!-- Message Display -->
     <div id="messageDisplay" class="message-display"></div>
 
     <div class="chat-container">
@@ -17,8 +18,19 @@
             <i class="fa-solid fa-arrow-up"></i>
         </button>
     </div>
+	<div class="channel-nav">
+    	<button onclick="switchChannel('channel1')">Channel 1</button>
+    	<button onclick="switchChannel('channel2')">Channel 2</button>
+    	<button onclick="switchChannel('channel3')">Channel 3</button>
+    	<button onclick="switchChannel('general')">General</button>
+	</div>
 	
-    <script src="/js/sendMessage.js"></script>
+	<p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
+	<input type="hidden" id="channel" th:value="${channel}">
+	
+		
+	 
+    <script defer src="/js/sendMessage.js"></script>
     
 </body>
 </html>

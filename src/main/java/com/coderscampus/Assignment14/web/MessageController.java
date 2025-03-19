@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +31,13 @@ public class MessageController {
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable String channel) {
         channel = channel.toLowerCase(); // Normalize
         System.out.println("Fetching messages for channel: " + channel);
+        
         List<Message> messages = messageService.getMessages(channel);
-        System.out.println("Messages returned: " + messages);
+
+        if (messages == null) {
+            return ResponseEntity.status(404).body(new ArrayList<>());
+        }
+
         return ResponseEntity.ok().body(messages);
     }
 
