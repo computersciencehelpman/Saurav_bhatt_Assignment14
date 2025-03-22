@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignment 14</title>
+    <script src="/js/sendMessage.js"></script> <!-- Ensure this script is loaded -->
 </head>
 <body>
-    <script type="text/javascript" src="/js/promptAlert.js"></script> 
-	<a href="/channel1">Channel 1</a><br/>
-	<a href="/channel2">Channel 2</a><br/>
-	<a href="/channel3">Channel 3</a><br/>
-	
+    <script type="text/javascript" src="/js/promptAlert.js"></script>
+
+    <button onclick="switchChannel('channel1')">Channel 1</button><br/>
+    <button onclick="switchChannel('channel2')">Channel 2</button><br/>
+    <button onclick="switchChannel('channel3')">Channel 3</button><br/>
+
+    <!-- If you want to retain the links but still use switchChannel(), you can do this -->
+    <a href="#" onclick="switchChannel('channel1'); return false;">Channel 1</a><br/>
+    <a href="#" onclick="switchChannel('channel2'); return false;">Channel 2</a><br/>
+    <a href="#" onclick="switchChannel('channel3'); return false;">Channel 3</a><br/>
 </body>
 </html>

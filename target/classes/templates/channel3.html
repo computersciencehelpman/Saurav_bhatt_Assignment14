@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignment 14</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -26,9 +27,9 @@
 	</div>
 	 
 	<p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
-	<input type="hidden" id="channel" th:value="${channel}">	
+	<input type="hidden" id="channel" th:value="${channel}" data-debug="true">	
 	 
-    <script defer src="/js/sendMessage.js"></script>
+    <script src="/js/sendMessage.js"></script>
     
 </body>
 </html>
