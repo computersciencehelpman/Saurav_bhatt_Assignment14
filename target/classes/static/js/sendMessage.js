@@ -1,46 +1,38 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const messageBox = document.getElementById("messageBox");
-    const sendButton = document.getElementById("sendButton");
-    const messageDisplay = document.getElementById("messageDisplay");
     const channelElement = document.getElementById("channel");
 
-    // ✅ Ensure all required elements exist
-    if (!messageBox || !sendButton || !messageDisplay || !channelElement) {
-        console.error("❌ Required elements not found!");
+    if (!channelElement) {
+        console.error("❌ Error: Channel element not found!");
         return;
     }
-	if (typeof sendMessage !== "function") {
-        console.error("❌ sendMessage() is not defined!");
-    } else {
-        console.log("✅ sendMessage() is properly loaded.");
-    }
+
     let currentChannel = channelElement.value.trim();
-    console.log(`✅ Resolved channel: ${currentChannel}`);
-
-    // ✅ If the channel is missing, show an error
+    
     if (!currentChannel) {
-        console.error("❌ Error: Channel name is missing!");
+        console.error("❌ Error: No channel found in hidden input!");
+        return;
     }
 
-    // ✅ Store channel in local storage
+    console.log(`✅ Resolved channel: ${currentChannel}`);
     localStorage.setItem("currentChannel", currentChannel);
+
+    // Load messages after confirming the channel
     loadMessages(currentChannel);
-
-    // ✅ Attach event listeners
-    sendButton.addEventListener("click", sendMessage);
-    messageBox.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-            sendMessage();
-        }
-    });
-
-    console.log("✅ Event listeners attached successfully.");
 });
 
 // ✅ Function to switch channels
 function switchChannel(channel) {
-    console.log(`Switching to channel: ${channel}`);
+    console.log(`🔄 Switching to channel: ${channel}`);
+
+    // Update hidden input field dynamically
+    const channelElement = document.getElementById("channel");
+    if (channelElement) {
+        channelElement.value = channel;
+    } else {
+        console.warn("⚠️ Hidden channel input not found!");
+    }
+
+    // Store in local storage and navigate
     localStorage.setItem("currentChannel", channel);
     window.location.href = `/${channel}`;
 }
@@ -74,31 +66,41 @@ function sendMessage() {
 	}
 	
 	async function loadMessages(currentChannel) {
-    console.log(`Fetching messages for: ${currentChannel}`); // Debugging
-    
-    const response = await fetch(`/messages/all/${currentChannel}`);
-    const data = await response.json();
+    console.log(`🔍 Fetching messages for: "${currentChannel}"`); // Debugging
 
-    console.log("📥 Raw API response:", JSON.stringify(data, null, 2)); // Debugging
-
-    // ✅ Ensure the response contains the 'messages' array
-    const messages = data; // Extract messages correctly
-    if (!Array.isArray(messages)) {
-        console.error("❌ Error: 'messages' property is not an array!", data);
-        return; // Stop execution if it's not an array
+    if (!currentChannel || currentChannel.trim() === "") {
+        console.error("❌ Error: Channel name is missing! Aborting request.");
+        return; // Stop execution
     }
 
-    messageDisplay.innerHTML = ""; // Clear previous messages
+    try {
+        const response = await fetch(`/messages/all/${currentChannel}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("📥 Raw API response:", JSON.stringify(data, null, 2));
 
-    messages.forEach(msg => {
-        let messageElement = document.createElement("div");
-        messageElement.classList.add("message");
-        messageElement.textContent = msg.text;
-        messageDisplay.appendChild(messageElement);
-    });
+        if (!Array.isArray(data)) {
+            console.error("❌ Error: Expected an array but got:", data);
+            return;
+        }
 
-    // Auto-scroll to the bottom
-    messageDisplay.scrollTop = messageDisplay.scrollHeight;
+        messageDisplay.innerHTML = ""; // Clear previous messages
+
+        data.forEach(msg => {
+            let messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+            messageElement.textContent = msg.text;
+            messageDisplay.appendChild(messageElement);
+        });
+
+        // Auto-scroll to the bottom
+        messageDisplay.scrollTop = messageDisplay.scrollHeight;
+    } catch (error) {
+        console.error("❌ Failed to load messages:", error);
+    }
 	}
+	
 	console.log("📡 Current channel value:", document.getElementById("channel").value);
 	
