@@ -30,15 +30,18 @@ public class MessageController {
     @GetMapping("/all/{channel}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable String channel) {
         channel = channel.toLowerCase(); // Normalize
-        System.out.println("Fetching messages for channel: " + channel);
-        
-        List<Message> messages = messageService.getMessages(channel);
+        System.out.println("📡 API Request: Fetch messages for channel -> " + channel);
 
-        if (messages == null) {
+        List<Message> messages = messageService.getMessages(channel);
+        
+        if (messages == null || messages.isEmpty()) {
+            System.out.println("❌ No messages found for channel: " + channel);
             return ResponseEntity.status(404).body(new ArrayList<>());
         }
 
+        System.out.println("✅ Messages retrieved: " + messages.size());
         return ResponseEntity.ok().body(messages);
     }
+
 
 }
