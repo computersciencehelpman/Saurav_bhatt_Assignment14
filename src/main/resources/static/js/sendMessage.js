@@ -16,8 +16,17 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(`✅ Resolved channel: ${currentChannel}`);
     localStorage.setItem("currentChannel", currentChannel);
 
-    // Load messages after confirming the channel
-    loadMessages(currentChannel);
+    // Load messages without passing the channel
+    loadMessages();
+    console.log("📡 Current channel value:", document.getElementById("channel").value);
+
+    // Attach event listener to the send button
+    const sendButton = document.getElementById("sendButton");
+    if (sendButton) {
+        sendButton.addEventListener("click", sendMessage);
+    } else {
+        console.warn("⚠️ Send button not found!");
+    }
 });
 
 // ✅ Function to switch channels
@@ -53,7 +62,7 @@ function sendMessage() {
         return;
     }
 
-    const currentChannel = channelElement.value.trim();
+    const currentChannel = localStorage.getItem("currentChannel");
     console.log(`📨 Sending message to ${currentChannel}: "${message}"`);
 
     // Simulating message sending
@@ -63,9 +72,12 @@ function sendMessage() {
 
     // Clear the input box
     messageBox.value = "";
-	}
-	
-	async function loadMessages(currentChannel) {
+}
+
+// ✅ Update loadMessages to fetch the channel from localStorage
+async function loadMessages() {
+    let currentChannel = localStorage.getItem("currentChannel");
+
     console.log(`🔍 Fetching messages for: "${currentChannel}"`); // Debugging
 
     if (!currentChannel || currentChannel.trim() === "") {
@@ -86,6 +98,7 @@ function sendMessage() {
             return;
         }
 
+        const messageDisplay = document.getElementById("messageDisplay");
         messageDisplay.innerHTML = ""; // Clear previous messages
 
         data.forEach(msg => {
@@ -100,7 +113,4 @@ function sendMessage() {
     } catch (error) {
         console.error("❌ Failed to load messages:", error);
     }
-	}
-	
-	console.log("📡 Current channel value:", document.getElementById("channel").value);
-	
+}

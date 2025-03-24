@@ -5,31 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <script>
-        window.onload = function () {
-            let channelFromTemplate = /*[[${channel}]]*/ "channel1";
-            currentChannel = channelFromTemplate.trim();
-            localStorage.setItem("currentChannel", currentChannel);
-            console.log("Loaded channel:", currentChannel);
-            loadMessages();
-        };
-    </script>
 </head>
 <body>
+
     <div id="messageDisplay" class="message-display"></div>
+
     <div class="chat-container">
         <textarea id="messageBox" rows="1" placeholder="Type a message..."></textarea>
         <button id="sendButton"><i class="fa-solid fa-arrow-up"></i></button>
     </div>
+
     <div class="channel-nav">
-    	<button onclick="switchChannel('channel1')">Channel 1</button>
-    	<button onclick="switchChannel('channel2')">Channel 2</button>
-    	<button onclick="switchChannel('channel3')">Channel 3</button>
-    	<button onclick="switchChannel('general')">general</button>
-	</div>
-    
-    <!-- Store the channel name in a hidden input field -->
-	<input type="hidden" id="channel" th:value="${channel}" data-debug="true">
-    <script src="/js/sendMessage.js"></script>
+        <button onclick="switchChannel('channel1')">Channel 1</button>
+        <button onclick="switchChannel('channel2')">Channel 2</button>
+        <button onclick="switchChannel('channel3')">Channel 3</button>
+        <button onclick="switchChannel('general')">General</button>
+    </div>
 </body>
 </html>

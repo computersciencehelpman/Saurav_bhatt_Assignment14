@@ -19,18 +19,18 @@
             <i class="fa-solid fa-arrow-up"></i>
         </button>
     </div>
-	<div class="channel-nav">
-    	<button onclick="switchChannel('channel1')">Channel 1</button>
-    	<button onclick="switchChannel('channel2')">Channel 2</button>
-    	<button onclick="switchChannel('channel3')">Channel 3</button>
-    	<button onclick="switchChannel('general')">General</button>
-	</div>
-	 
-	<p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
-	<input type="hidden" id="channel" th:value="${channel}" data-debug="true">	
-	 
-    <script src="/js/sendMessage.js"></script>
     
+    <div class="channel-nav">
+        <button onclick="switchChannel('channel1')">Channel 1</button>
+        <button onclick="switchChannel('channel2')">Channel 2</button>
+        <button onclick="switchChannel('channel3')">Channel 3</button>
+        <button onclick="switchChannel('general')">General</button>
+    </div>
+    
+    <p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
+    <input type="hidden" id="channel" th:attr="value=${channel}">
+    
+    <!-- ✅ Only keep the script import at the bottom -->
+    <script src="/js/sendMessage.js"></script>
 </body>
 </html>
-
