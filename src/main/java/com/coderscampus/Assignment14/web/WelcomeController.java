@@ -15,18 +15,4 @@ public class WelcomeController {
         return "general"; 
     }
     
-    @GetMapping("/channel1")
-    public String getChannel1(ModelMap model) {
-    	return "channel1";
-    }
-    
-    @GetMapping("/channel2")
-    public String getChannel2(ModelMap model) {
-    	return "channel2";
-    }
-    
-    @GetMapping("/channel3")
-    public String getChannel3(ModelMap model) {
-    	return "channel3";
-    }
 }

@@ -21,5 +21,8 @@
         <button onclick="switchChannel('channel3')">Channel 3</button>
         <button onclick="switchChannel('general')">General</button>
     </div>
+    <!-- Store the channel name in a hidden input field -->
+	<input type="hidden" id="channel" name="channel" value="${channel}" th:value="${channel}">
+    
 </body>
 </html>

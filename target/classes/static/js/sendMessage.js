@@ -9,25 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentChannel = channelElement.value.trim();
     
     if (!currentChannel) {
-        console.error("❌ Error: No channel found in hidden input!");
-        return;
+        console.warn("⚠️ No channel found in hidden input! Using 'channel1' as default.");
+        currentChannel = "channel1"; // Fallback default
+        channelElement.value = currentChannel; // Set it in the hidden input
     }
 
     console.log(`✅ Resolved channel: ${currentChannel}`);
     localStorage.setItem("currentChannel", currentChannel);
 
-    // Load messages without passing the channel
     loadMessages();
-    console.log("📡 Current channel value:", document.getElementById("channel").value);
-
-    // Attach event listener to the send button
-    const sendButton = document.getElementById("sendButton");
-    if (sendButton) {
-        sendButton.addEventListener("click", sendMessage);
-    } else {
-        console.warn("⚠️ Send button not found!");
-    }
 });
+
 
 // ✅ Function to switch channels
 function switchChannel(channel) {
