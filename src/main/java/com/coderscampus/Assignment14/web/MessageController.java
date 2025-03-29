@@ -24,7 +24,15 @@ public class MessageController {
     public void sendMessage(@PathVariable String channel, @RequestBody Map<String, String> payload) {
         System.out.println("Received message for channel: " + channel); // Debugging
         String text = payload.get("text");
-        messageService.addMessage(channel, text);
+        String fromUser = payload.get("fromUser"); // ✅ Get sender from payload
+
+        if (fromUser == null || fromUser.isEmpty()) {
+            fromUser = "anonymous"; // Default sender if not provided
+        }
+
+        System.out.println("📨 Storing message: " + text + " | From: " + fromUser);
+
+        messageService.addMessage(channel, text, fromUser);
     }
     
     @GetMapping("/all/{channel}")

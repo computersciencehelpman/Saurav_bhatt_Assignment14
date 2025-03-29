@@ -13,8 +13,8 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public void addMessage(String channel, String text) {
-        messageRepository.saveMessage(channel.toLowerCase(), text);
+    public void addMessage(String channel, String text, String fromUser) {
+        messageRepository.saveMessage(channel.toLowerCase(), text, fromUser);
     }
 
     public List<Message> getMessages(String channel) {

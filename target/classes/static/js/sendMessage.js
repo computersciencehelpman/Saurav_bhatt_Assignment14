@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
     loadMessages();
 });
 
-
 // ✅ Function to switch channels
 function switchChannel(channel) {
     console.log(`🔄 Switching to channel: ${channel}`);
@@ -38,7 +37,25 @@ function switchChannel(channel) {
     window.location.href = `/${channel}`;
 }
 
-function sendMessage() {
+document.addEventListener("DOMContentLoaded", function () {
+    const sendButton = document.getElementById("sendButton");
+    const messageBox = document.getElementById("messageBox");
+
+    if (sendButton) {
+        sendButton.addEventListener("click", sendMessage);
+    }
+
+    if (messageBox) {
+        messageBox.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault(); // Prevents new line in textarea
+                sendMessage();
+            }
+        });
+    }
+});
+
+async function sendMessage() {
     const messageBox = document.getElementById("messageBox");
     const messageDisplay = document.getElementById("messageDisplay");
     const channelElement = document.getElementById("channel");
@@ -55,26 +72,56 @@ function sendMessage() {
     }
 
     const currentChannel = localStorage.getItem("currentChannel");
-    console.log(`📨 Sending message to ${currentChannel}: "${message}"`);
+    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Ensure a stored user
 
-    // Simulating message sending
-    const messageElement = document.createElement("p");
-    messageElement.textContent = message;
-    messageDisplay.appendChild(messageElement);
+    console.log(`📨 Sending message to ${currentChannel}: "${message}" | From: ${currentUser}`);
 
-    // Clear the input box
-    messageBox.value = "";
+    // Create message object
+    const messagePayload = { text: message, fromUser: currentUser };
+
+    try {
+        const response = await fetch(`/messages/send/${currentChannel}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(messagePayload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`❌ Failed to send message: ${response.status}`);
+        }
+
+        console.log("✅ Message sent successfully!");
+
+        // ✅ Create a message bubble immediately
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message-bubble", "sent");
+        messageElement.innerText = `${currentUser}: ${message}`; // ✅ Fix applied
+        messageDisplay.appendChild(messageElement);
+
+        // Auto-scroll to bottom
+        messageDisplay.scrollTop = messageDisplay.scrollHeight;
+
+        // Clear the input box
+        messageBox.value = "";
+
+        // Refresh messages after sending
+        await loadMessages();
+    } catch (error) {
+        console.error("❌ Error sending message:", error);
+    }
 }
 
-// ✅ Update loadMessages to fetch the channel from localStorage
 async function loadMessages() {
     let currentChannel = localStorage.getItem("currentChannel");
+    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Ensure user matches sent messages
 
-    console.log(`🔍 Fetching messages for: "${currentChannel}"`); // Debugging
+    console.log(`🔍 Fetching messages for: "${currentChannel}"`);
 
     if (!currentChannel || currentChannel.trim() === "") {
         console.error("❌ Error: Channel name is missing! Aborting request.");
-        return; // Stop execution
+        return;
     }
 
     try {
@@ -83,7 +130,8 @@ async function loadMessages() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("📥 Raw API response:", JSON.stringify(data, null, 2));
+
+        console.log("📥 Messages received:", JSON.stringify(data, null, 2));
 
         if (!Array.isArray(data)) {
             console.error("❌ Error: Expected an array but got:", data);
@@ -95,12 +143,20 @@ async function loadMessages() {
 
         data.forEach(msg => {
             let messageElement = document.createElement("div");
-            messageElement.classList.add("message");
-            messageElement.textContent = msg.text;
+            messageElement.classList.add("message-bubble");
+
+            // Compare against stored user ID
+            if (msg.fromUser === currentUser) {
+                messageElement.classList.add("sent"); // ✅ Blue bubble for sender
+            } else {
+                messageElement.classList.add("received"); // ✅ Gray bubble for others
+            }
+
+            messageElement.innerText = `${msg.fromUser}: ${msg.text}`; // ✅ Fix applied
             messageDisplay.appendChild(messageElement);
         });
 
-        // Auto-scroll to the bottom
+        // Auto-scroll to bottom
         messageDisplay.scrollTop = messageDisplay.scrollHeight;
     } catch (error) {
         console.error("❌ Failed to load messages:", error);
