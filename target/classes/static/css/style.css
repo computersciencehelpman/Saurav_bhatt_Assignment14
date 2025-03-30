@@ -38,7 +38,8 @@
 .message-bubble.sent {
     background-color: #007aff;
     color: white;
-    align-self: flex-end; /* ✅ Right-align inside column */
+    align-self: flex-end; /* ✅ Aligns the bubble to the right */
+    text-align: right; /* ✅ Aligns the text inside to the right */
 }
 
 /* Received messages (gray bubbles, left-aligned) */

@@ -72,11 +72,10 @@ async function sendMessage() {
     }
 
     const currentChannel = localStorage.getItem("currentChannel");
-    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Ensure a stored user
+    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Fix applied
 
     console.log(`📨 Sending message to ${currentChannel}: "${message}" | From: ${currentUser}`);
 
-    // Create message object
     const messagePayload = { text: message, fromUser: currentUser };
 
     try {
@@ -97,16 +96,12 @@ async function sendMessage() {
         // ✅ Create a message bubble immediately
         const messageElement = document.createElement("div");
         messageElement.classList.add("message-bubble", "sent");
-        messageElement.innerText = `${currentUser}: ${message}`; // ✅ Fix applied
+        messageElement.innerText = `${currentUser}: ${message}`; 
         messageDisplay.appendChild(messageElement);
 
-        // Auto-scroll to bottom
         messageDisplay.scrollTop = messageDisplay.scrollHeight;
-
-        // Clear the input box
         messageBox.value = "";
 
-        // Refresh messages after sending
         await loadMessages();
     } catch (error) {
         console.error("❌ Error sending message:", error);
@@ -114,8 +109,8 @@ async function sendMessage() {
 }
 
 async function loadMessages() {
-    let currentChannel = localStorage.getItem("currentChannel");
-    const currentUser = localStorage.getItem("currentUser") || "you";
+    const currentChannel = localStorage.getItem("currentChannel");
+    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Fix applied
 
     console.log(`🔍 Fetching messages for: "${currentChannel}"`);
 
@@ -139,9 +134,8 @@ async function loadMessages() {
         }
 
         const messageDisplay = document.getElementById("messageDisplay");
-        messageDisplay.innerHTML = ""; // Clear previous messages
+        messageDisplay.innerHTML = ""; 
 
-        // Group messages by sender
         const groupedMessages = {};
         data.forEach(msg => {
             if (!groupedMessages[msg.fromUser]) {
@@ -150,12 +144,10 @@ async function loadMessages() {
             groupedMessages[msg.fromUser].push(msg);
         });
 
-        // Create columns for each sender
         Object.keys(groupedMessages).forEach(user => {
             let userColumn = document.createElement("div");
             userColumn.classList.add("message-column");
 
-            // ✅ Add the 'sent' class if the user is the current user
             if (user === currentUser) {
                 userColumn.classList.add("sent");
             }
@@ -164,7 +156,6 @@ async function loadMessages() {
                 let messageElement = document.createElement("div");
                 messageElement.classList.add("message-bubble");
 
-                // Assign appropriate styles
                 if (msg.fromUser === currentUser) {
                     messageElement.classList.add("sent");
                 } else {
@@ -178,7 +169,6 @@ async function loadMessages() {
             messageDisplay.appendChild(userColumn);
         });
 
-        // Auto-scroll to bottom
         messageDisplay.scrollLeft = messageDisplay.scrollWidth;
     } catch (error) {
         console.error("❌ Failed to load messages:", error);
