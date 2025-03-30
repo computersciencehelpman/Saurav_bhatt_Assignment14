@@ -2,39 +2,42 @@
 /* Message Display Area */
 .message-display {
     display: flex;
-    flex-direction: column;
-    align-items: stretch; /* Ensure messages take up space */
+    flex-direction: row; /* ✅ Display messages in columns */
+    align-items: flex-start; /* Align messages to the top */
+    gap: 20px; /* Space between different users' messages */
     padding: 10px;
-    overflow-y: auto;
+    overflow-x: auto; /* Allow horizontal scrolling */
     height: 400px;
     background-color: #f5f5f5;
 }
 
+.message-column {
+    display: flex;
+    flex-direction: column; /* ✅ Stack messages inside the column */
+    align-items: center; /* Center messages in each column */
+    gap: 5px; /* Space between messages */
+}
+
 /* Message bubbles */
 .message-bubble {
-    max-width: 60%;
+    width: 200px; /* ✅ Consistent width */
     padding: 10px 15px;
-    margin: 5px 0; /* Ensure spacing between messages */
     border-radius: 15px;
     font-size: 16px;
     word-wrap: break-word;
-    display: inline-block;
+    text-align: center; /* ✅ Center text in bubbles */
 }
 
 /* Sent messages (blue bubbles, right-aligned) */
 .message-bubble.sent {
-    align-self: flex-end; /* Push to the right */
     background-color: #007aff;
     color: white;
-    text-align: right;
 }
 
 /* Received messages (gray bubbles, left-aligned) */
 .message-bubble.received {
-    align-self: flex-start; /* Push to the left */
     background-color: #e5e5ea;
     color: black;
-    text-align: left;
 }
 
 /* Chat Input Box */

@@ -141,23 +141,40 @@ async function loadMessages() {
         const messageDisplay = document.getElementById("messageDisplay");
         messageDisplay.innerHTML = ""; // Clear previous messages
 
+        // Group messages by sender
+        const groupedMessages = {};
         data.forEach(msg => {
-            let messageElement = document.createElement("div");
-            messageElement.classList.add("message-bubble");
-
-            // Compare against stored user ID
-            if (msg.fromUser === currentUser) {
-                messageElement.classList.add("sent"); // ✅ Blue bubble for sender
-            } else {
-                messageElement.classList.add("received"); // ✅ Gray bubble for others
+            if (!groupedMessages[msg.fromUser]) {
+                groupedMessages[msg.fromUser] = [];
             }
+            groupedMessages[msg.fromUser].push(msg);
+        });
 
-            messageElement.innerText = `${msg.fromUser}: ${msg.text}`; // ✅ Fix applied
-            messageDisplay.appendChild(messageElement);
+        // Create columns for each sender
+        Object.keys(groupedMessages).forEach(user => {
+            let userColumn = document.createElement("div");
+            userColumn.classList.add("message-column");
+
+            groupedMessages[user].forEach(msg => {
+                let messageElement = document.createElement("div");
+                messageElement.classList.add("message-bubble");
+
+                // Compare against stored user ID
+                if (msg.fromUser === currentUser) {
+                    messageElement.classList.add("sent");
+                } else {
+                    messageElement.classList.add("received");
+                }
+
+                messageElement.innerText = `${msg.fromUser}: ${msg.text}`;
+                userColumn.appendChild(messageElement);
+            });
+
+            messageDisplay.appendChild(userColumn);
         });
 
         // Auto-scroll to bottom
-        messageDisplay.scrollTop = messageDisplay.scrollHeight;
+        messageDisplay.scrollLeft = messageDisplay.scrollWidth;
     } catch (error) {
         console.error("❌ Failed to load messages:", error);
     }
