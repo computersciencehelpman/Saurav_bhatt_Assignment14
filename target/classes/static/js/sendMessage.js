@@ -115,11 +115,11 @@ async function sendMessage() {
 
 async function loadMessages() {
     let currentChannel = localStorage.getItem("currentChannel");
-    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Ensure user matches sent messages
+    const currentUser = localStorage.getItem("currentUser") || "you";
 
     console.log(`🔍 Fetching messages for: "${currentChannel}"`);
 
-    if (!currentChannel || currentChannel.trim() === "") {
+    if (!currentChannel) {
         console.error("❌ Error: Channel name is missing! Aborting request.");
         return;
     }
@@ -155,11 +155,16 @@ async function loadMessages() {
             let userColumn = document.createElement("div");
             userColumn.classList.add("message-column");
 
+            // ✅ Add the 'sent' class if the user is the current user
+            if (user === currentUser) {
+                userColumn.classList.add("sent");
+            }
+
             groupedMessages[user].forEach(msg => {
                 let messageElement = document.createElement("div");
                 messageElement.classList.add("message-bubble");
 
-                // Compare against stored user ID
+                // Assign appropriate styles
                 if (msg.fromUser === currentUser) {
                     messageElement.classList.add("sent");
                 } else {

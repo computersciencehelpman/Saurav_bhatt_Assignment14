@@ -2,42 +2,50 @@
 /* Message Display Area */
 .message-display {
     display: flex;
-    flex-direction: row; /* ✅ Display messages in columns */
-    align-items: flex-start; /* Align messages to the top */
-    gap: 20px; /* Space between different users' messages */
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between; /* ✅ Spread columns out */
+    gap: 20px;
     padding: 10px;
-    overflow-x: auto; /* Allow horizontal scrolling */
+    overflow-x: auto;
     height: 400px;
     background-color: #f5f5f5;
 }
 
 .message-column {
     display: flex;
-    flex-direction: column; /* ✅ Stack messages inside the column */
-    align-items: center; /* Center messages in each column */
-    gap: 5px; /* Space between messages */
+    flex-direction: column;
+    align-items: flex-start; /* Default: left-aligned */
+    gap: 5px;
+    width: 200px;
+}
+
+.message-column.sent {
+    align-items: flex-end;
+    margin-left: auto; /* ✅ Pushes column to the right */
 }
 
 /* Message bubbles */
 .message-bubble {
-    width: 200px; /* ✅ Consistent width */
+    width: 200px; /* Consistent width */
     padding: 10px 15px;
     border-radius: 15px;
     font-size: 16px;
     word-wrap: break-word;
-    text-align: center; /* ✅ Center text in bubbles */
 }
 
 /* Sent messages (blue bubbles, right-aligned) */
 .message-bubble.sent {
     background-color: #007aff;
     color: white;
+    align-self: flex-end; /* ✅ Right-align inside column */
 }
 
 /* Received messages (gray bubbles, left-aligned) */
 .message-bubble.received {
     background-color: #e5e5ea;
     color: black;
+    align-self: flex-start; /* ✅ Left-align inside column */
 }
 
 /* Chat Input Box */
