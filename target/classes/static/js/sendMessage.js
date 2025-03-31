@@ -96,7 +96,7 @@ async function sendMessage() {
         // ✅ Create a message bubble immediately
         const messageElement = document.createElement("div");
         messageElement.classList.add("message-bubble", "sent");
-        messageElement.innerText = `${currentUser}: ${message}`; 
+        messageElement.innerText = `${message}`; 
         messageDisplay.appendChild(messageElement);
 
         messageDisplay.scrollTop = messageDisplay.scrollHeight;
@@ -162,7 +162,7 @@ async function loadMessages() {
                     messageElement.classList.add("received");
                 }
 
-                messageElement.innerText = `${msg.fromUser}: ${msg.text}`;
+                messageElement.innerText = `${msg.text}`;
                 userColumn.appendChild(messageElement);
             });
 
