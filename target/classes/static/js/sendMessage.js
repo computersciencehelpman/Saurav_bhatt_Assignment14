@@ -130,13 +130,12 @@ function sendMessage() {
     if (!message) return;
 
     const payload = {
-        channel: currentChannel,
         text: message,
         fromUser: currentUser,
         toUser: toUser || ""
     };
 
-    fetch("/send", {
+    fetch(`/send/${currentChannel}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -151,28 +150,22 @@ function sendMessage() {
         .catch(console.error);
 }
 
-
 function loadMessages() {
     const currentChannel = localStorage.getItem("currentChannel") || "channel1";
 
-    fetch(`/messages?channel=${currentChannel}`)
-        .then(response => response.json())
-        .then(messages => {
-            const container = document.getElementById("messageContainer");
-            if (!container) return;
-
-            container.innerHTML = ""; // Clear old messages
-
-            messages.forEach(msg => {
-                const div = document.createElement("div");
-                div.className = msg.sender === localStorage.getItem("currentUser") ? "sent" : "received";
-                div.textContent = `${msg.sender}: ${msg.content}`;
-                container.appendChild(div);
-            });
-
-            container.scrollTop = container.scrollHeight; // Auto scroll
+    fetch("/messages/all/" + currentChannel)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
         })
-        .catch(console.error);
+        .then(messages => {
+            // update UI with messages
+        })
+        .catch(error => {
+            console.error("Error fetching messages:", error);
+        });
 }
 
 // ✅ DOM Initialization
