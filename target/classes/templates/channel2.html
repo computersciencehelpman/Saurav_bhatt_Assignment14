@@ -12,7 +12,9 @@
 
     <!-- Message Display -->
     <div id="messageDisplay" class="message-display"></div>
-
+	<input type="text" id="receiverInput" placeholder="Enter receiver (optional)" />
+	<label for="toUserInput">Send to:</label>
+	<input type="text" id="toUserInput" placeholder="Recipient username" />
     <div class="chat-container">
         <textarea id="messageBox" rows="1" placeholder="Type a message..."></textarea>
         <button id="sendButton">
@@ -28,6 +30,7 @@
     </div>
     
     <p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
+    <p id="currentUserDisplay"></p>
     <input type="hidden" id="channel" value="${channel}" th:value="${channel}">
     
     <!-- ✅ Only keep the script import at the bottom -->

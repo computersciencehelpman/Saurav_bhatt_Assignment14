@@ -8,12 +8,11 @@ import java.util.*;
 public class MessageRepository {
     private final Map<String, List<Message>> messagesByChannel = new HashMap<>();
 
-    public void saveMessage(String channel, String text, String fromUser) {
-        channel = channel.toLowerCase(); // Normalize channel names
+    public void saveMessage(String channel, String text, String fromUser, String toUser) {
+        channel = channel.toLowerCase();
         messagesByChannel.putIfAbsent(channel, new ArrayList<>());
-        messagesByChannel.get(channel).add(new Message(channel, text, fromUser)); // Include fromUser
-        
-        System.out.println("📥 Saved message: " + text + " | From: " + fromUser + " in channel: " + channel);
+        messagesByChannel.get(channel).add(new Message(channel, text, fromUser, toUser));
+        System.out.println("📥 Saved message: " + text + " | From: " + fromUser + " to " + toUser + " in channel: " + channel);
     }
 
     public List<Message> getAllMessages(String channel) {

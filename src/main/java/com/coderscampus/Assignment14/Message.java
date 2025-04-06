@@ -9,31 +9,28 @@ public class Message {
     @JsonProperty("text")
     private String text;
 
-    @JsonProperty("fromUser") // Ensure JSON includes this field
+    @JsonProperty("fromUser")
     private String fromUser;
+
+    @JsonProperty("toUser") // 👈 New field
+    private String toUser;
 
     public Message() {}
 
-    public Message(String channel, String text, String fromUser) {
+    public Message(String channel, String text, String fromUser, String toUser) {
         this.channel = channel;
         this.text = text;
         this.fromUser = fromUser;
+        this.toUser = toUser;
     }
 
-    public String getChannel() {
-        return channel;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getFromUser() {
-        return fromUser;
-    }
+    public String getChannel() { return channel; }
+    public String getText() { return text; }
+    public String getFromUser() { return fromUser; }
+    public String getToUser() { return toUser; }
 
     @Override
     public String toString() {
-        return "Message [channel=" + channel + ", text=" + text + ", fromUser=" + fromUser + "]";
+        return "Message [channel=" + channel + ", text=" + text + ", fromUser=" + fromUser + ", toUser=" + toUser + "]";
     }
 }

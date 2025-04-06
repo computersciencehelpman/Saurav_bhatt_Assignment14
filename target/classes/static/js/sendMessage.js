@@ -1,24 +1,89 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const channelElement = document.getElementById("channel");
+async function showAlertPrompt() {
+    return new Promise((resolve) => {
+        const alertBox = document.createElement("div");
+        alertBox.id = "alertBox";
+        Object.assign(alertBox.style, {
+            position: "fixed",
+            top: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "auto",
+            padding: "10px 20px",
+            backgroundColor: "#f8d7da",
+            color: "#721c24",
+            border: "1px solid #f5c6cb",
+            borderRadius: "5px",
+            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
+            textAlign: "center",
+            zIndex: "1000"
+        });
 
-    if (!channelElement) {
-        console.error("❌ Error: Channel element not found!");
-        return;
-    }
+        const message = document.createElement("p");
+        message.textContent = "Enter your name:";
+        message.style.margin = "0";
 
-    let currentChannel = channelElement.value.trim();
-    
-    if (!currentChannel) {
-        console.warn("⚠️ No channel found in hidden input! Using 'channel1' as default.");
-        currentChannel = "channel1"; // Fallback default
-        channelElement.value = currentChannel; // Set it in the hidden input
-    }
+        const input = document.createElement("input");
+        Object.assign(input, {
+            type: "text",
+            placeholder: "Your name"
+        });
+        Object.assign(input.style, {
+            margin: "5px",
+            padding: "5px",
+            border: "1px solid #ccc",
+            borderRadius: "3px"
+        });
 
-    console.log(`✅ Resolved channel: ${currentChannel}`);
-    localStorage.setItem("currentChannel", currentChannel);
+        const okButton = document.createElement("button");
+        okButton.textContent = "OK";
+        Object.assign(okButton.style, {
+            marginLeft: "5px",
+            padding: "5px 10px",
+            border: "none",
+            borderRadius: "3px",
+            backgroundColor: "#28a745",
+            color: "white",
+            cursor: "pointer"
+        });
 
-    loadMessages();
-});
+        const cancelButton = document.createElement("button");
+        cancelButton.textContent = "Cancel";
+        Object.assign(cancelButton.style, {
+            marginLeft: "5px",
+            padding: "5px 10px",
+            border: "none",
+            borderRadius: "3px",
+            backgroundColor: "#dc3545",
+            color: "white",
+            cursor: "pointer"
+        });
+
+        okButton.onclick = function () {
+            const userName = input.value.trim();
+            if (userName === "") {
+                input.style.border = "1px solid red";
+                return;
+            }
+
+            localStorage.setItem("currentUser", userName);
+            alert(`Hello, ${userName}!!!`);
+            document.body.removeChild(alertBox);
+            resolve(userName);
+        };
+
+        cancelButton.onclick = function () {
+            document.body.removeChild(alertBox);
+            resolve(null);
+        };
+
+        input.oninput = function () {
+            input.style.border = "1px solid #ccc";
+        };
+
+        alertBox.append(message, input, okButton, cancelButton);
+        document.body.appendChild(alertBox);
+    });
+}
 
 // ✅ Function to switch channels
 function switchChannel(channel) {
@@ -55,122 +120,97 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-async function sendMessage() {
+function sendMessage() {
     const messageBox = document.getElementById("messageBox");
-    const messageDisplay = document.getElementById("messageDisplay");
-    const channelElement = document.getElementById("channel");
-
-    if (!messageBox || !messageDisplay || !channelElement) {
-        console.error("❌ Required elements not found!");
-        return;
-    }
-
-    const message = messageBox.value.trim();
-    if (!message) {
-        console.warn("⚠️ Cannot send an empty message.");
-        return;
-    }
-
+    const currentUser = localStorage.getItem("currentUser");
     const currentChannel = localStorage.getItem("currentChannel");
-    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Fix applied
+    const toUser = document.getElementById("toUserInput")?.value.trim();
 
-    console.log(`📨 Sending message to ${currentChannel}: "${message}" | From: ${currentUser}`);
+    const message = messageBox?.value.trim();
+    if (!message) return;
 
-    const messagePayload = { text: message, fromUser: currentUser };
+    const payload = {
+        channel: currentChannel,
+        text: message,
+        fromUser: currentUser,
+        toUser: toUser || ""
+    };
 
-    try {
-        const response = await fetch(`/messages/send/${currentChannel}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(messagePayload)
-        });
-
-        if (!response.ok) {
-            throw new Error(`❌ Failed to send message: ${response.status}`);
-        }
-
-        console.log("✅ Message sent successfully!");
-
-        // ✅ Create a message bubble immediately
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message-bubble", "sent");
-        messageElement.innerText = `${message}`; 
-        messageDisplay.appendChild(messageElement);
-
-        messageDisplay.scrollTop = messageDisplay.scrollHeight;
-        messageBox.value = "";
-
-        await loadMessages();
-    } catch (error) {
-        console.error("❌ Error sending message:", error);
-    }
+    fetch("/send", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to send message.");
+            messageBox.value = "";
+            loadMessages();
+        })
+        .catch(console.error);
 }
 
-async function loadMessages() {
-    const currentChannel = localStorage.getItem("currentChannel");
-    const currentUser = localStorage.getItem("currentUser") || "you"; // ✅ Fix applied
 
-    console.log(`🔍 Fetching messages for: "${currentChannel}"`);
+function loadMessages() {
+    const currentChannel = localStorage.getItem("currentChannel") || "channel1";
 
-    if (!currentChannel) {
-        console.error("❌ Error: Channel name is missing! Aborting request.");
-        return;
-    }
+    fetch(`/messages?channel=${currentChannel}`)
+        .then(response => response.json())
+        .then(messages => {
+            const container = document.getElementById("messageContainer");
+            if (!container) return;
 
-    try {
-        const response = await fetch(`/messages/all/${currentChannel}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
+            container.innerHTML = ""; // Clear old messages
 
-        console.log("📥 Messages received:", JSON.stringify(data, null, 2));
-
-        if (!Array.isArray(data)) {
-            console.error("❌ Error: Expected an array but got:", data);
-            return;
-        }
-
-        const messageDisplay = document.getElementById("messageDisplay");
-        messageDisplay.innerHTML = ""; 
-
-        const groupedMessages = {};
-        data.forEach(msg => {
-            if (!groupedMessages[msg.fromUser]) {
-                groupedMessages[msg.fromUser] = [];
-            }
-            groupedMessages[msg.fromUser].push(msg);
-        });
-
-        Object.keys(groupedMessages).forEach(user => {
-            let userColumn = document.createElement("div");
-            userColumn.classList.add("message-column");
-
-            if (user === currentUser) {
-                userColumn.classList.add("sent");
-            }
-
-            groupedMessages[user].forEach(msg => {
-                let messageElement = document.createElement("div");
-                messageElement.classList.add("message-bubble");
-
-                if (msg.fromUser === currentUser) {
-                    messageElement.classList.add("sent");
-                } else {
-                    messageElement.classList.add("received");
-                }
-
-                messageElement.innerText = `${msg.text}`;
-                userColumn.appendChild(messageElement);
+            messages.forEach(msg => {
+                const div = document.createElement("div");
+                div.className = msg.sender === localStorage.getItem("currentUser") ? "sent" : "received";
+                div.textContent = `${msg.sender}: ${msg.content}`;
+                container.appendChild(div);
             });
 
-            messageDisplay.appendChild(userColumn);
-        });
-
-        messageDisplay.scrollLeft = messageDisplay.scrollWidth;
-    } catch (error) {
-        console.error("❌ Failed to load messages:", error);
-    }
+            container.scrollTop = container.scrollHeight; // Auto scroll
+        })
+        .catch(console.error);
 }
+
+// ✅ DOM Initialization
+document.addEventListener("DOMContentLoaded", async function () {
+    const channelElement = document.getElementById("channel");
+    let currentChannel = channelElement?.value.trim() || "channel1";
+    channelElement.value = currentChannel;
+    localStorage.setItem("currentChannel", currentChannel);
+
+    let currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+        currentUser = await showAlertPrompt();
+    }
+
+    if (currentUser) {
+        const display = document.getElementById("currentUserDisplay");
+        if (display) {
+            display.textContent = `You are logged in as: ${currentUser}`;
+        }
+        loadMessages(); // Load messages after login
+    }
+
+    const sendButton = document.getElementById("sendButton");
+    const messageBox = document.getElementById("messageBox");
+
+    if (sendButton) {
+        sendButton.addEventListener("click", sendMessage);
+    }
+
+    if (messageBox) {
+        messageBox.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    }
+
+    // Polling every 500ms
+    setInterval(loadMessages, 500);
+});

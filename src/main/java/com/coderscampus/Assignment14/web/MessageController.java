@@ -22,17 +22,13 @@ public class MessageController {
 
     @PostMapping("/send/{channel}")
     public void sendMessage(@PathVariable String channel, @RequestBody Map<String, String> payload) {
-        System.out.println("Received message for channel: " + channel); // Debugging
         String text = payload.get("text");
-        String fromUser = payload.get("fromUser"); // ✅ Get sender from payload
+        String fromUser = payload.get("fromUser");
+        String toUser = payload.getOrDefault("toUser", ""); // Optional receiver
 
-        if (fromUser == null || fromUser.isEmpty()) {
-            fromUser = "anonymous"; // Default sender if not provided
-        }
+        if (fromUser == null || fromUser.isEmpty()) fromUser = "anonymous";
 
-        System.out.println("📨 Storing message: " + text + " | From: " + fromUser);
-
-        messageService.addMessage(channel, text, fromUser);
+        messageService.addMessage(channel, text, fromUser, toUser);
     }
     
     @GetMapping("/all/{channel}")
