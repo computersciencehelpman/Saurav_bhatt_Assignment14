@@ -135,7 +135,7 @@ function sendMessage() {
         toUser: toUser || ""
     };
 
-    fetch(`/send/${currentChannel}`, {
+    fetch(`/messages/send/${currentChannel}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -153,20 +153,15 @@ function sendMessage() {
 function loadMessages() {
     const currentChannel = localStorage.getItem("currentChannel") || "channel1";
 
-    fetch("/messages/all/" + currentChannel)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
+    fetch(`/messages/all/${currentChannel}`)
+        .then(response => response.json())
         .then(messages => {
-            // update UI with messages
+            // render your messages here
+            console.log(messages);
         })
-        .catch(error => {
-            console.error("Error fetching messages:", error);
-        });
+        .catch(console.error);
 }
+
 
 // ✅ DOM Initialization
 document.addEventListener("DOMContentLoaded", async function () {

@@ -3,6 +3,7 @@ package com.coderscampus.Assignment14.web;
 import com.coderscampus.Assignment14.Message;
 import com.coderscampus.Assignment14.service.MessageService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
-    private final MessageService messageService;
+  
+	@Autowired
+    private MessageService messageService;
 
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
@@ -33,15 +36,16 @@ public class MessageController {
     
     @GetMapping("/all/{channel}")
     public ResponseEntity<List<Message>> getAllMessages(@PathVariable String channel) {
-        channel = channel.toLowerCase(); // Normalize
+        channel = channel.toLowerCase();
         System.out.println("Fetching messages for channel: " + channel);
         
         List<Message> messages = messageService.getMessages(channel);
-        
         if (messages == null) {
-            return ResponseEntity.status(404).body(new ArrayList<>());
+            System.out.println("No messages found for channel: " + channel);
+            messages = new ArrayList<>(); // Return empty list instead of 404
         }
 
         return ResponseEntity.ok().body(messages);
     }
+
 }

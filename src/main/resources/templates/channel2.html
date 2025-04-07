@@ -31,7 +31,7 @@
     
     <p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
     <p id="currentUserDisplay"></p>
-    <input type="hidden" id="channel" value="${channel}" th:value="${channel}">
+   <input type="hidden" id="channel" th:value="${channel}" />
     
     <!-- ✅ Only keep the script import at the bottom -->
     <script src="/js/sendMessage.js"></script>
