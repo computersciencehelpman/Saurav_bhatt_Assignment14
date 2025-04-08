@@ -102,23 +102,6 @@ function switchChannel(channel) {
     window.location.href = `/${channel}`;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const sendButton = document.getElementById("sendButton");
-    const messageBox = document.getElementById("messageBox");
-
-    if (sendButton) {
-        sendButton.addEventListener("click", sendMessage);
-    }
-
-    if (messageBox) {
-        messageBox.addEventListener("keydown", function (event) {
-            if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault(); // Prevents new line in textarea
-                sendMessage();
-            }
-        });
-    }
-});
 
 function sendMessage() {
     const messageBox = document.getElementById("messageBox");
@@ -156,14 +139,30 @@ function loadMessages() {
     fetch(`/messages/all/${currentChannel}`)
         .then(response => response.json())
         .then(messages => {
-            // render your messages here
-            console.log(messages);
+            const messageDisplay = document.getElementById("messageDisplay");
+            if (!messageDisplay) return;
+
+            messageDisplay.innerHTML = "";
+
+            messages.forEach(msg => {
+                const msgDiv = document.createElement("div");
+                msgDiv.classList.add("message-bubble");
+
+                const isSentByMe = msg.fromUser === localStorage.getItem("currentUser");
+                msgDiv.classList.add(isSentByMe ? "sent" : "received");
+
+                const text = document.createElement("span");
+                text.textContent = msg.text;
+
+                msgDiv.appendChild(text);
+                messageDisplay.appendChild(msgDiv);
+            });
+
+            messageDisplay.scrollTop = messageDisplay.scrollHeight;
         })
         .catch(console.error);
 }
 
-
-// ✅ DOM Initialization
 document.addEventListener("DOMContentLoaded", async function () {
     const channelElement = document.getElementById("channel");
     let currentChannel = channelElement?.value.trim() || "channel1";
@@ -199,6 +198,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    // Polling every 500ms
     setInterval(loadMessages, 500);
 });
+
