@@ -145,24 +145,29 @@ function loadMessages() {
             messageDisplay.innerHTML = "";
 
             messages.forEach(msg => {
-    		const isSentByMe = msg.fromUser === localStorage.getItem("currentUser");
+    		const msgWrapper = document.createElement("div");
+   			msgWrapper.classList.add("message-column");
+    		msgWrapper.classList.add(msg.fromUser === localStorage.getItem("currentUser") ? "sent" : "received");
 
-    		// Create the outer column wrapper
-    		const columnDiv = document.createElement("div");
-    		columnDiv.classList.add("message-column");
-    		if (isSentByMe) columnDiv.classList.add("sent");
-
-    		// Create the message bubble
     		const msgDiv = document.createElement("div");
     		msgDiv.classList.add("message-bubble");
-    		msgDiv.classList.add(isSentByMe ? "sent" : "received");
+    		msgDiv.classList.add(msg.fromUser === localStorage.getItem("currentUser") ? "sent" : "received");
 
-   		 	msgDiv.textContent = msg.text;
+    		const text = document.createElement("span");
+    		text.textContent = msg.text;
 
-    		// Nest and append
-    		columnDiv.appendChild(msgDiv);
-    		messageDisplay.appendChild(columnDiv);
+    		const time = document.createElement("div");
+    		time.classList.add("timestamp");
+    		const date = new Date(msg.timestamp); // assuming ISO format
+    		time.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    		msgDiv.appendChild(text);
+    		msgDiv.appendChild(time);
+    		msgWrapper.appendChild(msgDiv);
+    		messageDisplay.appendChild(msgWrapper);
 		});
+            
+            
             
 
             messageDisplay.scrollTop = messageDisplay.scrollHeight;

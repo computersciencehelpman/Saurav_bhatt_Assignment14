@@ -1,5 +1,7 @@
 package com.coderscampus.Assignment14;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Message {
@@ -14,6 +16,9 @@ public class Message {
 
     @JsonProperty("toUser") // 👈 New field
     private String toUser;
+    
+    @JsonProperty("timestamp")
+    private LocalDateTime timestamp;
 
     public Message() {}
 
@@ -22,15 +27,18 @@ public class Message {
         this.text = text;
         this.fromUser = fromUser;
         this.toUser = toUser;
+        this.timestamp = LocalDateTime.now();
     }
 
     public String getChannel() { return channel; }
     public String getText() { return text; }
     public String getFromUser() { return fromUser; }
     public String getToUser() { return toUser; }
+    public LocalDateTime getTimestamp() { return timestamp; }
 
-    @Override
-    public String toString() {
-        return "Message [channel=" + channel + ", text=" + text + ", fromUser=" + fromUser + ", toUser=" + toUser + "]";
-    }
+	@Override
+	public String toString() {
+		return "Message [channel=" + channel + ", text=" + text + ", fromUser=" + fromUser + ", toUser=" + toUser
+				+ ", timestamp=" + timestamp + "]";
+	}
 }
