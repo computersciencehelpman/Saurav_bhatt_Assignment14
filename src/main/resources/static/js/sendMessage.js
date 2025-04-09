@@ -145,18 +145,25 @@ function loadMessages() {
             messageDisplay.innerHTML = "";
 
             messages.forEach(msg => {
-                const msgDiv = document.createElement("div");
-                msgDiv.classList.add("message-bubble");
+    		const isSentByMe = msg.fromUser === localStorage.getItem("currentUser");
 
-                const isSentByMe = msg.fromUser === localStorage.getItem("currentUser");
-                msgDiv.classList.add(isSentByMe ? "sent" : "received");
+    		// Create the outer column wrapper
+    		const columnDiv = document.createElement("div");
+    		columnDiv.classList.add("message-column");
+    		if (isSentByMe) columnDiv.classList.add("sent");
 
-                const text = document.createElement("span");
-                text.textContent = msg.text;
+    		// Create the message bubble
+    		const msgDiv = document.createElement("div");
+    		msgDiv.classList.add("message-bubble");
+    		msgDiv.classList.add(isSentByMe ? "sent" : "received");
 
-                msgDiv.appendChild(text);
-                messageDisplay.appendChild(msgDiv);
-            });
+   		 	msgDiv.textContent = msg.text;
+
+    		// Nest and append
+    		columnDiv.appendChild(msgDiv);
+    		messageDisplay.appendChild(columnDiv);
+		});
+            
 
             messageDisplay.scrollTop = messageDisplay.scrollHeight;
         })
