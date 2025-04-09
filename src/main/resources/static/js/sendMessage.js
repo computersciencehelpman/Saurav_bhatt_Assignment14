@@ -159,7 +159,14 @@ function loadMessages() {
     		const time = document.createElement("div");
     		time.classList.add("timestamp");
     		const date = new Date(msg.timestamp); // assuming ISO format
-    		time.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    		
+    		time.textContent = date.toLocaleString([], {
+    			 year: 'numeric',
+    			 month: 'short',
+    			 day: 'numeric',
+    			 hour: '2-digit',
+    			 minute: '2-digit'
+    		}).replace(',', '');
 
     		msgDiv.appendChild(text);
     		msgDiv.appendChild(time);

@@ -47,12 +47,12 @@
 }
 
 .timestamp {
-    font-size: 12px;
+    font-size: 11px;
     color: #888;
     margin-top: 4px;
     text-align: right;
+    font-style: italic;
 }
-
 
 /* Chat Input Box */
 .chat-container {
