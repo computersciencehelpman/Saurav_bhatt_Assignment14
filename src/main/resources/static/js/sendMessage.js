@@ -220,8 +220,14 @@ avatar.textContent = msg.fromUser;
 
 msgDiv.appendChild(text);
 msgDiv.appendChild(time);
-msgWrapper.appendChild(msgDiv);
-msgWrapper.appendChild(avatar); // 👈 Add avatar to wrapper
+if (msg.fromUser === localStorage.getItem("currentUser")) {
+    msgWrapper.appendChild(msgDiv);
+    msgWrapper.appendChild(avatar); // Avatar on the right for sender
+} else {
+    msgWrapper.appendChild(avatar); // Avatar on the left for receiver
+    msgWrapper.appendChild(msgDiv);
+}
+
 messageDisplay.appendChild(msgWrapper);
     		
     		
