@@ -102,6 +102,53 @@ function switchChannel(channel) {
     window.location.href = `/${channel}`;
 }
 
+let lastMessageDate = null;
+
+function appendMessage(message, sender) {
+    const messageDate = new Date(message.timestamp);
+    const formattedDate = messageDate.toLocaleDateString();
+
+    if (lastMessageDate !== formattedDate) {
+        const dateHeader = document.createElement('div');
+        dateHeader.className = 'date-header';
+
+        const today = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+
+        if (formattedDate === today.toLocaleDateString()) {
+            dateHeader.textContent = 'Today';
+        } else if (formattedDate === yesterday.toLocaleDateString()) {
+            dateHeader.textContent = 'Yesterday';
+        } else {
+            dateHeader.textContent = messageDate.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        chat.appendChild(dateHeader);
+        lastMessageDate = formattedDate;
+    }
+
+    const div = document.createElement('div');
+    div.className = sender === username ? 'bubble sent' : 'bubble received';
+    div.innerHTML = `
+    <div class="message-content">${message.content}</div>
+    <div class="timestamp">${messageDate.toLocaleString([], {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    })}</div>
+    <div class="avatar">${sender}</div>
+`;
+    
+    chat.appendChild(div);
+}
+
 
 function sendMessage() {
     const messageBox = document.getElementById("messageBox");
@@ -150,28 +197,34 @@ function loadMessages() {
     		msgWrapper.classList.add(msg.fromUser === localStorage.getItem("currentUser") ? "sent" : "received");
 
     		const msgDiv = document.createElement("div");
-    		msgDiv.classList.add("message-bubble");
-    		msgDiv.classList.add(msg.fromUser === localStorage.getItem("currentUser") ? "sent" : "received");
+msgDiv.classList.add("message-bubble");
+msgDiv.classList.add(msg.fromUser === localStorage.getItem("currentUser") ? "sent" : "received");
 
-    		const text = document.createElement("span");
-    		text.textContent = msg.text;
+const text = document.createElement("span");
+text.textContent = msg.text;
 
-    		const time = document.createElement("div");
-    		time.classList.add("timestamp");
-    		const date = new Date(msg.timestamp); // assuming ISO format
+const time = document.createElement("div");
+time.classList.add("timestamp");
+const date = new Date(msg.timestamp);
+time.textContent = date.toLocaleString([], {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+}).replace(',', '');
+
+const avatar = document.createElement("div");
+avatar.classList.add("avatar");
+avatar.textContent = msg.fromUser;
+
+msgDiv.appendChild(text);
+msgDiv.appendChild(time);
+msgWrapper.appendChild(msgDiv);
+msgWrapper.appendChild(avatar); // 👈 Add avatar to wrapper
+messageDisplay.appendChild(msgWrapper);
     		
-    		time.textContent = date.toLocaleString([], {
-    			 year: 'numeric',
-    			 month: 'short',
-    			 day: 'numeric',
-    			 hour: '2-digit',
-    			 minute: '2-digit'
-    		}).replace(',', '');
-
-    		msgDiv.appendChild(text);
-    		msgDiv.appendChild(time);
-    		msgWrapper.appendChild(msgDiv);
-    		messageDisplay.appendChild(msgWrapper);
+    		
 		});
             
             

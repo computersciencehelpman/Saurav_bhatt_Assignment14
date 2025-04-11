@@ -54,6 +54,34 @@
     font-style: italic;
 }
 
+.date-header {
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 15px 0 5px;
+    padding: 4px 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.avatar {
+    margin-left: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    color: #333;
+    align-self: flex-end;
+}
+
+.bubble.sent .avatar {
+    margin-left: auto;
+}
+
+.bubble.received .avatar {
+    margin-right: auto;
+}
+
 /* Chat Input Box */
 .chat-container {
     position: fixed;
