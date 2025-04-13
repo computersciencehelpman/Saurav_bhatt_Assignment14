@@ -65,7 +65,7 @@ async function showAlertPrompt() {
                 return;
             }
 
-            localStorage.setItem("currentUser", userName);
+            sessionStorage.setItem("currentUser", userName);
             alert(`Hello, ${userName}!!!`);
             document.body.removeChild(alertBox);
             resolve(userName);
@@ -152,7 +152,7 @@ function appendMessage(message, sender) {
 
 function sendMessage() {
     const messageBox = document.getElementById("messageBox");
-    const currentUser = localStorage.getItem("currentUser");
+    const currentUser = sessionStorage.getItem("currentUser");
     const currentChannel = localStorage.getItem("currentChannel");
     const toUser = document.getElementById("toUserInput")?.value.trim();
 
@@ -194,11 +194,11 @@ function loadMessages() {
             messages.forEach(msg => {
     		const msgWrapper = document.createElement("div");
    			msgWrapper.classList.add("message-column");
-    		msgWrapper.classList.add(msg.fromUser === localStorage.getItem("currentUser") ? "sent" : "received");
+    		msgWrapper.classList.add(msg.fromUser === sessionStorage.getItem("currentUser") ? "sent" : "received");
 
     		const msgDiv = document.createElement("div");
 msgDiv.classList.add("message-bubble");
-msgDiv.classList.add(msg.fromUser === localStorage.getItem("currentUser") ? "sent" : "received");
+msgDiv.classList.add(msg.fromUser === sessionStorage.getItem("currentUser") ? "sent" : "received");
 
 const text = document.createElement("span");
 text.textContent = msg.text;
@@ -220,7 +220,7 @@ avatar.textContent = msg.fromUser;
 
 msgDiv.appendChild(text);
 msgDiv.appendChild(time);
-if (msg.fromUser === localStorage.getItem("currentUser")) {
+if (msg.fromUser === sessionStorage.getItem("currentUser")) {
     msgWrapper.appendChild(msgDiv);
     msgWrapper.appendChild(avatar); // Avatar on the right for sender
 } else {
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     channelElement.value = currentChannel;
     localStorage.setItem("currentChannel", currentChannel);
 
-    let currentUser = localStorage.getItem("currentUser");
+    let currentUser = sessionStorage.getItem("currentUser");
     if (!currentUser) {
         currentUser = await showAlertPrompt();
     }

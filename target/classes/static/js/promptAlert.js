@@ -45,7 +45,7 @@ function showAlertPrompt() {
                 return;
             }
 
-            localStorage.setItem("currentUser", userName);
+            sessionStorage.setItem("currentUser", userName);
             alert(`Hello, ${userName}!!!`);
             document.body.removeChild(alertBox);
             resolve(userName); // ✅ Continue only after name is set
