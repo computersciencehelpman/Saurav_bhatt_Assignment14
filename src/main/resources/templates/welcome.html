@@ -1,13 +1,13 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignment 14</title>
-    <script src="/js/sendMessage.js"></script> <!-- Ensure this script is loaded -->
+    <script src="/js/promptAlert.js"></script>
 </head>
 <body>
-    <script type="text/javascript" src="/js/promptAlert.js"></script>
-	<script>
+    <script>
         document.addEventListener("DOMContentLoaded", async () => {
             const user = sessionStorage.getItem("currentUser");
 
@@ -21,9 +21,6 @@
             }
         });
     </script>
-
-    <a href="#" onclick="switchChannel('channel1'); return false;">Channel 1</a><br/>
-    <a href="#" onclick="switchChannel('channel2'); return false;">Channel 2</a><br/>
-    <a href="#" onclick="switchChannel('channel3'); return false;">Channel 3</a><br/>
+    
 </body>
 </html>

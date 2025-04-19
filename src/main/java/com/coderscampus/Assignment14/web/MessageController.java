@@ -1,7 +1,7 @@
 package com.coderscampus.Assignment14.web;
 
-import com.coderscampus.Assignment14.Message;
 import com.coderscampus.Assignment14.service.MessageService;
+import com.coderscamus.domain.Message;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

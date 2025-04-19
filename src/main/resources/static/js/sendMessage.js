@@ -85,11 +85,11 @@ async function showAlertPrompt() {
     });
 }
 
-// ✅ Function to switch channels
+
 function switchChannel(channel) {
     console.log(`🔄 Switching to channel: ${channel}`);
 
-    // Update hidden input field dynamically
+   
     const channelElement = document.getElementById("channel");
     if (channelElement) {
         channelElement.value = channel;
@@ -97,7 +97,6 @@ function switchChannel(channel) {
         console.warn("⚠️ Hidden channel input not found!");
     }
 
-    // Store in local storage and navigate
     localStorage.setItem("currentChannel", channel);
     window.location.href = `/${channel}`;
 }
@@ -222,9 +221,9 @@ msgDiv.appendChild(text);
 msgDiv.appendChild(time);
 if (msg.fromUser === sessionStorage.getItem("currentUser")) {
     msgWrapper.appendChild(msgDiv);
-    msgWrapper.appendChild(avatar); // Avatar on the right for sender
+    msgWrapper.appendChild(avatar); 
 } else {
-    msgWrapper.appendChild(avatar); // Avatar on the left for receiver
+    msgWrapper.appendChild(avatar); 
     msgWrapper.appendChild(msgDiv);
 }
 
@@ -257,7 +256,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (display) {
             display.textContent = `You are logged in as: ${currentUser}`;
         }
-        loadMessages(); // Load messages after login
+        loadMessages(); 
     }
 
     const sendButton = document.getElementById("sendButton");

@@ -9,10 +9,11 @@ import org.slf4j.LoggerFactory;
 
 @Controller
 public class WelcomeController {
-		
-    @GetMapping("/general")
-    public String getGeneral(ModelMap model) {
-        return "general"; 
+
+    @GetMapping("/welcome")
+    public String welcomePage() {
+        return "welcome"; 
     }
-    
 }
+
+    

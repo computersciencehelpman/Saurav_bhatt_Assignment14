@@ -48,22 +48,7 @@ function showAlertPrompt() {
             sessionStorage.setItem("currentUser", userName);
             alert(`Hello, ${userName}!!!`);
             document.body.removeChild(alertBox);
-            resolve(userName); // ✅ Continue only after name is set
-        };
-
-        const cancelButton = document.createElement("button");
-        cancelButton.textContent = "Cancel";
-        cancelButton.style.marginLeft = "5px";
-        cancelButton.style.padding = "5px 10px";
-        cancelButton.style.border = "none";
-        cancelButton.style.borderRadius = "3px";
-        cancelButton.style.backgroundColor = "#dc3545";
-        cancelButton.style.color = "white";
-        cancelButton.style.cursor = "pointer";
-
-        cancelButton.onclick = function () {
-            document.body.removeChild(alertBox);
-            resolve(null); // Let it continue anyway
+            resolve(userName);
         };
 
         input.oninput = function () {
@@ -73,8 +58,8 @@ function showAlertPrompt() {
         alertBox.appendChild(message);
         alertBox.appendChild(input);
         alertBox.appendChild(okButton);
-        alertBox.appendChild(cancelButton);
 
         document.body.appendChild(alertBox);
+        input.focus(); 
     });
 }

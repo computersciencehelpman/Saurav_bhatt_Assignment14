@@ -1,6 +1,8 @@
 package com.coderscampus.Assignment14.repository;
 
 import com.coderscampus.Assignment14.*;
+import com.coderscamus.domain.Message;
+
 import org.springframework.stereotype.Repository;
 import java.util.*;
 
