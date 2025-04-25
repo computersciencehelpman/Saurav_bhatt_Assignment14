@@ -45,11 +45,22 @@ function showAlertPrompt() {
                 return;
             }
 
-            sessionStorage.setItem("currentUser", userName);
-            alert(`Hello, ${userName}!!!`);
-            document.body.removeChild(alertBox);
-            resolve(userName);
-        };
+		sessionStorage.setItem("currentUser", userName);
+		alert(`Hello, ${userName}!!!`);
+		document.body.removeChild(alertBox);
+		resolve(userName); // This resolves the prompt
+
+		// THEN call fetch and redirect
+		fetch("/setSessionUser", {
+    	method: "POST",
+    	headers: {
+        	"Content-Type": "application/json"
+    	},
+    	body: JSON.stringify({ username: userName })
+		}).then(() => {
+    		window.location.href = "/general";
+		});
+		        
 
         input.oninput = function () {
             input.style.border = "1px solid #ccc";

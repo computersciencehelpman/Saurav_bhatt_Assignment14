@@ -1,26 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment 14</title>
-    <script src="/js/promptAlert.js"></script>
+    <title>Welcome</title>
 </head>
 <body>
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            const user = sessionStorage.getItem("currentUser");
-
-            if (!user) {
-                const enteredName = await showAlertPrompt();
-                if (enteredName) {
-                    window.location.href = "/general";
-                }
-            } else {
-                window.location.href = "/general";
-            }
-        });
-    </script>
-    
+    <h1>Welcome to the Chat App!</h1>
+    <form action="/login" method="post">
+        <label for="username">Enter your name:</label>
+        <input type="text" name="username" id="username" required />
+        <button type="submit">Enter</button>
+    </form>
 </body>
 </html>

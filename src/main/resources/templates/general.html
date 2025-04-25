@@ -7,20 +7,6 @@
 </head>
 <body>
     <script type="text/javascript" src="/js/promptAlert.js"></script>
-	<script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            const user = sessionStorage.getItem("currentUser");
-
-            if (!user) {
-                const enteredName = await showAlertPrompt();
-                if (enteredName) {
-                    window.location.href = "/general";
-                }
-            } else {
-                window.location.href = "/general";
-            }
-        });
-    </script>
 
     <a href="#" onclick="switchChannel('channel1'); return false;">Channel 1</a><br/>
     <a href="#" onclick="switchChannel('channel2'); return false;">Channel 2</a><br/>

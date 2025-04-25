@@ -1,17 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat - ${channel}</title>
-    <script src="/js/switchChannel.js"></script>
+    <title>Chat - <span th:text="${channel}">Channel</span></title>
+    
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
+    <script src="/js/switchChannel.js"></script>
+    <script src="/js/sendMessage.js"></script>
+
 </head>
 <body>
     <!-- Message Display -->
-    <div id="messageDisplay" class="message-display"></div>
+    <div id="messageDisplay" class="message-display">
+        <ul>
+            <li th:each="message : ${messages}">
+                <strong th:text="${message.fromUser}">[From]</strong>: 
+                <span th:text="${message.text}">[Message]</span>
+                <span th:if="${message.toUser != ''}" style="color: gray; font-style: italic;">
+                    (to <span th:text="${message.toUser}">[To]</span>)
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Message Input Area -->
     <div class="chat-container">
         <textarea id="messageBox" rows="1" placeholder="Type a message..."></textarea>
         <button id="sendButton">
@@ -19,6 +34,7 @@
         </button>
     </div>
 
+    <!-- Channel Navigation -->
     <div class="channel-nav">
         <button onclick="switchChannel('channel1')">Channel 1</button>
         <button onclick="switchChannel('channel2')">Channel 2</button>
@@ -29,7 +45,5 @@
     <p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
     <p id="currentUserDisplay"></p>
     <input type="hidden" id="channel" th:value="${channel}" />
-
-    <script src="/js/sendMessage.js"></script>
 </body>
 </html>
