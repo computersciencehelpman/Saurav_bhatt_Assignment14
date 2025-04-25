@@ -1,7 +1,7 @@
 package com.coderscampus.Assignment14.service;
 
 import com.coderscampus.Assignment14.repository.MessageRepository;
-import com.coderscamus.domain.Message;
+import com.coderscampus.domain.Message;
 
 import org.springframework.stereotype.Service;
 import java.util.List;

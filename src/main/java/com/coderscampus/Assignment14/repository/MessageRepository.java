@@ -1,9 +1,9 @@
 package com.coderscampus.Assignment14.repository;
 
-import com.coderscampus.Assignment14.*;
-import com.coderscamus.domain.Message;
-
 import org.springframework.stereotype.Repository;
+
+import com.coderscampus.domain.Message;
+
 import java.util.*;
 
 @Repository
@@ -14,7 +14,6 @@ public class MessageRepository {
         channel = channel.toLowerCase();
         messagesByChannel.putIfAbsent(channel, new ArrayList<>());
         messagesByChannel.get(channel).add(new Message(channel, text, fromUser, toUser));
-        System.out.println("📥 Saved message: " + text + " | From: " + fromUser + " to " + toUser + " in channel: " + channel);
     }
 
     public List<Message> getAllMessages(String channel) {
