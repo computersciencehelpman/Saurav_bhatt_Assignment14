@@ -10,6 +10,8 @@
     <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
     <script src="/js/switchChannel.js"></script>
     <script src="/js/sendMessage.js"></script>
+    document.addEventListener("DOMContentLoaded", async function () {
+    const currentUser = sessionStorage.getItem("currentUser");    
 
 </head>
 <body>
@@ -45,5 +47,20 @@
     <p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
     <p id="currentUserDisplay"></p>
     <input type="hidden" id="channel" th:value="${channel}" />
+    <script>
+		document.addEventListener("DOMContentLoaded", async function () {
+    	const currentUser = sessionStorage.getItem("currentUser");
+
+    	if (!currentUser) {
+        	const user = await showAlertPrompt();
+        if (!user)
+        	return;
+    	}
+
+    document.getElementById("currentUserDisplay").textContent = "Logged in as: " + sessionStorage.getItem("currentUser");
+
+});
+</script>
+    
 </body>
 </html>

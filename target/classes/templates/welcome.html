@@ -1,15 +1,42 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome</title>
+    <title>Welcome to Chat</title>
 </head>
 <body>
-    <h1>Welcome to the Chat App!</h1>
-    <form action="/login" method="post">
+    <h1>Welcome!</h1>
+    <form id="welcomeForm">
         <label for="username">Enter your name:</label>
-        <input type="text" name="username" id="username" required />
-        <button type="submit">Enter</button>
+        <input type="text" id="username" required />
+        <button type="submit">Enter Chat</button>
     </form>
+
+    <script>
+        document.getElementById("welcomeForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent default form submission
+            const userName = document.getElementById("username").value.trim();
+
+            if (userName === "") {
+                alert("Please enter a name");
+                return;
+            }
+
+            // ✅ Set sessionStorage
+            sessionStorage.setItem("currentUser", userName);
+
+            // ✅ Optionally inform the server
+            await fetch("/setSessionUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username: userName })
+            });
+
+            // ✅ Navigate to chat (e.g., general channel)
+            window.location.href = "/general";
+        });
+    </script>
 </body>
 </html>

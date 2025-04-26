@@ -6,7 +6,6 @@ function showAlertPrompt() {
         alertBox.style.top = "10px";
         alertBox.style.left = "50%";
         alertBox.style.transform = "translateX(-50%)";
-        alertBox.style.width = "auto";
         alertBox.style.padding = "10px 20px";
         alertBox.style.backgroundColor = "#f8d7da";
         alertBox.style.color = "#721c24";
@@ -45,22 +44,22 @@ function showAlertPrompt() {
                 return;
             }
 
-		sessionStorage.setItem("currentUser", userName);
-		alert(`Hello, ${userName}!!!`);
-		document.body.removeChild(alertBox);
-		resolve(userName); // This resolves the prompt
+            sessionStorage.setItem("currentUser", userName);
+            alert(`Hello, ${userName}!!!`);
+            document.body.removeChild(alertBox);
+            resolve(userName);
 
-		// THEN call fetch and redirect
-		fetch("/setSessionUser", {
-    	method: "POST",
-    	headers: {
-        	"Content-Type": "application/json"
-    	},
-    	body: JSON.stringify({ username: userName })
-		}).then(() => {
-    		window.location.href = "/general";
-		});
-		        
+            // Send user to server and redirect after it's done
+            fetch("/setSessionUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username: userName })
+            }).then(() => {
+                window.location.href = "/general";
+            });
+        };
 
         input.oninput = function () {
             input.style.border = "1px solid #ccc";
