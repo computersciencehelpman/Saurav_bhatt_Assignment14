@@ -14,7 +14,6 @@
             height: 100vh;
             background: linear-gradient(135deg, #6dd5ed, #2193b0);
         }
-
         .welcome-container {
             background-color: white;
             padding: 40px;
@@ -23,12 +22,10 @@
             text-align: center;
             width: 300px;
         }
-
         h1 {
             margin-bottom: 20px;
             color: #333;
         }
-
         input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -37,7 +34,6 @@
             margin-bottom: 20px;
             font-size: 16px;
         }
-
         button {
             background-color: #2193b0;
             color: white;
@@ -48,9 +44,23 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         button:hover {
             background-color: #176e87;
+        }
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #2193b0;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -64,28 +74,45 @@
     </div>
 
     <script>
-	document.getElementById("welcomeForm").addEventListener("submit", async function (event) {
-    	event.preventDefault();
-    	const userName = document.getElementById("username").value.trim();
+    document.getElementById("welcomeForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const userNameInput = document.getElementById("username");
+        const userName = userNameInput.value.trim();
+        const submitButton = this.querySelector("button");
 
-    	if (!userName) {
-        	alert("Please enter your name");
-        	return;
-    	}
+        if (!userName) {
+            alert("Please enter your name");
+            return;
+        }
 
-    	sessionStorage.setItem("currentUser", userName);
+        userNameInput.disabled = true;
+        submitButton.disabled = true;
 
-    	await fetch("/setSessionUser", {
-        	method: "POST",
-        	headers: { "Content-Type": "application/json" },
-        	body: JSON.stringify({ username: userName })
-    	});
+        submitButton.innerHTML = `<span class="spinner"></span>Entering...`;
 
-    
-    	window.location.href = "/channels";
-	});
-	</script>
-    
-    
+        sessionStorage.setItem("currentUser", userName);
+
+        try {
+            await fetch("/setSessionUser", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: userName })
+            });
+
+            setTimeout(() => {
+                window.location.href = "/channels";
+            }, 300);
+            
+        } catch (error) {
+            console.error("Error setting session user:", error);
+            alert("Something went wrong. Please try again.");
+
+            userNameInput.disabled = false;
+            submitButton.disabled = false;
+            submitButton.textContent = "Enter Chat";
+        }
+    });
+    </script>
 </body>
 </html>
+
