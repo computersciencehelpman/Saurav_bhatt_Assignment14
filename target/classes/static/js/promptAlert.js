@@ -57,7 +57,7 @@ function showAlertPrompt() {
                 },
                 body: JSON.stringify({ username: userName })
             }).then(() => {
-                window.location.href = "/general";
+                window.location.href = "/channels";
             });
         };
 

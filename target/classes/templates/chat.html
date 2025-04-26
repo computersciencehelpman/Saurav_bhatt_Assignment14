@@ -1,8 +1,8 @@
 <script>
     window.onload = function () {
-    let channelFromTemplate = "[[${channel}]]"; // Thymeleaf variable
+    let channelFromTemplate = "[[${channel}]]"; 
     currentChannel = channelFromTemplate;  
-    localStorage.setItem("currentChannel", currentChannel); // Store the channel
+    localStorage.setItem("currentChannel", currentChannel);
     console.log("Loaded channel:", currentChannel);
     loadMessages();
 };
