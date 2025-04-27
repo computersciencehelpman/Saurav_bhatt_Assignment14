@@ -19,6 +19,11 @@
             border-bottom: 1px solid #ddd;
         }
 
+		.channel-item:hover {
+  			background-color: #f0f0f0;
+  			transition: background-color 0.2s ease;
+		}
+		
         .channel-list {
             list-style: none;
             padding: 0;

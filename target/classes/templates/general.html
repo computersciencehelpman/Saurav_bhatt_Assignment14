@@ -1,30 +1,101 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Messages</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/general.css">
-    
-    
+    <title>Channels</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #4A90E2;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .channel-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+
+        .channel-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .channel-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .channel-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .channel-icon {
+            background-color: #4A90E2;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .channel-text {
+            flex-grow: 1;
+        }
+
+        .channel-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .channel-last-message {
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">Messages</div>
+    <div class="header">Channels</div>
 
     <ul class="channel-list">
         <li class="channel-item" th:each="channel : ${channels}">
-            <div class="channel-icon">
-                <span th:text="${#strings.substring(channel.name, 0, 1)}">C</span> 
-            </div>
-            <div class="channel-text">
-                <div class="channel-name" th:text="${channel.name}">Channel Name</div>
-                <div class="channel-last-message" th:text="${channel.lastMessage}">Last message preview...</div>
-            </div>
+            <a class="channel-link" th:href="@{'/channels/' + ${channel.name}}">
+                <div class="channel-icon">
+                    <span th:text="${#strings.substring(channel.name, 0, 1)}">C</span>
+                </div>
+                <div class="channel-text">
+                    <div class="channel-name" th:text="${channel.name}">Channel Name</div>
+                    <div class="channel-last-message" th:text="${channel.lastMessage}">Last message preview...</div>
+                </div>
+            </a>
         </li>
     </ul>
-</div>
 
 </body>
 </html>

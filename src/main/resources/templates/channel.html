@@ -2,74 +2,43 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <titleAssignment14</title>
-    
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <title th:text="'Channel - ' + ${channelName}">Channel</title>
     <link rel="stylesheet" href="/css/style.css">
-    <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
-    <script src="/js/switchChannel.js"></script>
-    <script src="/js/sendMessage.js"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-        const currentUser = sessionStorage.getItem("currentUser");
-
-        if (!currentUser) {
-            const user = await showAlertPrompt();
-            if (!user) return;
-        }
-
-        // Continue loading messages, etc.
-    });
-	</script>
 </head>
 <body>
-    <!-- Message Display -->
-    <div id="messageDisplay" class="message-display">
-        <ul>
-            <li th:each="message : ${messages}">
-                <strong th:text="${message.fromUser}">[From]</strong>: 
-                <span th:text="${message.text}">[Message]</span>
-                <span th:if="${message.toUser != ''}" style="color: gray; font-style: italic;">
-                    (to <span th:text="${message.toUser}">[To]</span>)
-                </span>
-            </li>
-        </ul>
+
+<div class="container">
+    <div class="header">
+        <h1 th:text="${channelName}">Channel Name</h1>
     </div>
 
-    <!-- Message Input Area -->
-    <div class="chat-container">
-        <textarea id="messageBox" rows="1" placeholder="Type a message..."></textarea>
-        <button id="sendButton">
-            <i class="fa-solid fa-arrow-up"></i>
-        </button>
+    <div id="messages" class="messages-list">
+        <!-- Messages will be loaded here -->
+        <div th:each="message : ${messages}" class="message-item">
+            <b th:text="${message.sender}">Sender</b>: 
+            <span th:text="${message.content}">Message Content</span>
+        </div>
     </div>
 
-    <!-- Channel Navigation -->
-    <div class="channel-nav">
-        <button onclick="switchChannel('channel1')">Channel 1</button>
-        <button onclick="switchChannel('channel2')">Channel 2</button>
-        <button onclick="switchChannel('channel3')">Channel 3</button>
-        <button onclick="switchChannel('general')">General</button>
-    </div>
+    <form id="sendMessageForm" method="post" th:action="@{'/channels/' + ${channelName} + '/send'}">
+        <input type="text" name="content" placeholder="Type your message..." required>
+        <button type="submit">Send</button>
+    </form>
+</div>
 
-    <p>Current Channel: <span th:text="${channel}">[Channel Name]</span></p>
-    <p id="currentUserDisplay"></p>
-    <input type="hidden" id="channel" th:value="${channel}" />
-    <script>
-		document.addEventListener("DOMContentLoaded", async function () {
-    	const currentUser = sessionStorage.getItem("currentUser");
+<script>
+    async function loadMessages() {
+        const response = await fetch(window.location.pathname + "/messages");
+        if (response.ok) {
+            const messagesHtml = await response.text();
+            document.getElementById("messages").innerHTML = messagesHtml;
+        }
+    }
 
-    	if (!currentUser) {
-        	const user = await showAlertPrompt();
-        if (!user)
-        	return;
-    	}
-
-    document.getElementById("currentUserDisplay").textContent = "Logged in as: " + sessionStorage.getItem("currentUser");
-
-});
+    // Refresh messages every 1 second
+    setInterval(loadMessages, 1000);
 </script>
-    
+
 </body>
 </html>
+

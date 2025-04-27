@@ -13,7 +13,7 @@ public class MessageRepository {
     public void saveMessage(String channel, String text, String fromUser, String toUser) {
         channel = channel.toLowerCase();
         messagesByChannel.putIfAbsent(channel, new ArrayList<>());
-        messagesByChannel.get(channel).add(new Message(channel, text, fromUser, toUser));
+        messagesByChannel.get(channel).add(new Message());
     }
 
     public List<Message> getAllMessages(String channel) {

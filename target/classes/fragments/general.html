@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="messagesList">
+        <div th:each="message : ${messages}" class="message-item">
+            <b th:text="${message.sender}">Sender</b>: 
+            <span th:text="${message.content}">Message Content</span>
+        </div>
+    </div>
+</body>
+</html>

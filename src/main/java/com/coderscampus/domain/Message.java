@@ -1,44 +1,31 @@
 package com.coderscampus.domain;
 
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Message {
-    @JsonProperty("channel")
-    private String channel;
+    private String sender;
+    private String content;
 
-    @JsonProperty("text")
-    private String text;
-
-    @JsonProperty("fromUser")
-    private String fromUser;
-
-    @JsonProperty("toUser") 
-    private String toUser;
-    
-    @JsonProperty("timestamp")
-    private LocalDateTime timestamp;
-
-    public Message() {}
-
-    public Message(String channel, String text, String fromUser, String toUser) {
-        this.channel = channel;
-        this.text = text;
-        this.fromUser = fromUser;
-        this.toUser = toUser;
-        this.timestamp = LocalDateTime.now();
+    public Message() {
+       
     }
 
-    public String getChannel() { return channel; }
-    public String getText() { return text; }
-    public String getFromUser() { return fromUser; }
-    public String getToUser() { return toUser; }
-    public LocalDateTime getTimestamp() { return timestamp; }
+    public Message(String sender, String content) {
+        this.sender = sender;
+        this.content = content;
+    }
+    
+    public String getSender() {
+        return sender;
+    }
 
-	@Override
-	public String toString() {
-		return "Message [channel=" + channel + ", text=" + text + ", fromUser=" + fromUser + ", toUser=" + toUser
-				+ ", timestamp=" + timestamp + "]";
-	}
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }
