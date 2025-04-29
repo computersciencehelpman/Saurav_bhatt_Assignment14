@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Channels</title>
-    
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -135,13 +135,11 @@
         .close:hover {
             color: black;
         }
-     
+    </style>
 </head>
 
 <body>
-    <div th:if="${error}" class="error-message">
-    	<p th:text="${error}" style="color: red;"></p>
-	</div>  
+
     <!-- Header with "+" button -->
     <div class="header">
         <span>Channels</span>
@@ -151,7 +149,7 @@
     <!-- Channel list -->
     <ul class="channel-list">
         <li class="channel-item" th:each="channel : ${channels}">
-            <a class="channel-link" th:href="@{'/channels/' + ${channel.name}}">
+            <a class="channel-link" th:href="@{'/channel/' + ${channel.name}}">
                 <div class="channel-icon">
                     <span th:text="${#strings.substring(channel.name, 0, 1)}">C</span>
                 </div>
@@ -175,11 +173,11 @@
 
     <script>
     function openModal() {
-        document.getElementById('createChannelModal').style.display = 'block';
+        document.getElementById('modal').style.display = 'block';
     }
 
     function closeModal() {
-        document.getElementById('createChannelModal').style.display = 'none';
+        document.getElementById('modal').style.display = 'none';
     }
 
     function createChannel() {
@@ -206,8 +204,7 @@
             alert('Please enter a channel name.');
         }
     }
-</script>
-    
+    </script>
 
 </body>
 </html>
