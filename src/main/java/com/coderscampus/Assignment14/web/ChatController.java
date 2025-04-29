@@ -35,5 +35,5 @@ public class ChatController {
         model.addAttribute("messages", messageService.getMessages(channel)); // <-- fixed this line
         return "channel";
     }
-    
+
 }

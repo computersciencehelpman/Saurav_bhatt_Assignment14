@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Channels</title>
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,9 +16,29 @@
             background-color: #4A90E2;
             color: white;
             padding: 1rem;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 2rem;
             font-weight: bold;
+            position: relative;
+        }
+
+        .add-button {
+            background-color: white;
+            color: #4A90E2;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .add-button:hover {
+            background-color: #e1eaff;
+            transform: scale(1.1);
         }
 
         .channel-list {
@@ -77,12 +98,57 @@
             font-size: 0.9rem;
             color: #777;
         }
-    </style>
+
+        /* Modal CSS */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+     
 </head>
+
 <body>
+    <div th:if="${error}" class="error-message">
+    	<p th:text="${error}" style="color: red;"></p>
+	</div>  
+    <!-- Header with "+" button -->
+    <div class="header">
+        <span>Channels</span>
+        <button class="add-button" onclick="openModal()">+</button>
+    </div>
 
-    <div class="header">Channels</div>
-
+    <!-- Channel list -->
     <ul class="channel-list">
         <li class="channel-item" th:each="channel : ${channels}">
             <a class="channel-link" th:href="@{'/channels/' + ${channel.name}}">
@@ -96,6 +162,52 @@
             </a>
         </li>
     </ul>
+
+    <!-- Popup Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Create New Channel</h2>
+            <input type="text" id="channelName" placeholder="Enter channel name" />
+            <button onclick="createChannel()">Create</button>
+        </div>
+    </div>
+
+    <script>
+    function openModal() {
+        document.getElementById('createChannelModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('createChannelModal').style.display = 'none';
+    }
+
+    function createChannel() {
+        const name = document.getElementById('channelName').value.trim();
+        if (name !== '') {
+            const formData = new URLSearchParams();
+            formData.append('name', name);
+
+            fetch('/create-channel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            }).then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    alert('Failed to create channel.');
+                }
+            });
+            closeModal();
+        } else {
+            alert('Please enter a channel name.');
+        }
+    }
+</script>
+    
 
 </body>
 </html>

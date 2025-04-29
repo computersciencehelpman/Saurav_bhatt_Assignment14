@@ -2,43 +2,67 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Channel - ' + ${channelName}">Channel</title>
+    <title th:text="'Channel - ' + ${channel.name}">Channel</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1 th:text="${channelName}">Channel Name</h1>
+        <h1 th:text="${channel.name}">Channel Name</h1>
     </div>
 
-    <div id="messages" class="messages-list">
-        <!-- Messages will be loaded here -->
-        <div th:each="message : ${messages}" class="message-item">
-            <b th:text="${message.sender}">Sender</b>: 
-            <span th:text="${message.content}">Message Content</span>
-        </div>
+    <!-- Message List -->
+    <div id="messageList" class="message-display">
+        <!-- Messages will be dynamically loaded here -->
     </div>
 
-    <form id="sendMessageForm" method="post" th:action="@{'/channels/' + ${channelName} + '/send'}">
+    <!-- Send Message Form -->
+    <form id="sendMessageForm" method="post" th:action="@{'/channel/' + ${channel.name} + '/send'}">
         <input type="text" name="content" placeholder="Type your message..." required>
         <button type="submit">Send</button>
     </form>
 </div>
 
 <script>
-    async function loadMessages() {
-        const response = await fetch(window.location.pathname + "/messages");
-        if (response.ok) {
-            const messagesHtml = await response.text();
-            document.getElementById("messages").innerHTML = messagesHtml;
-        }
-    }
+// Load messages every second
+setInterval(function() {
+    const currentChannel = /*[[${channel.name}]]*/ 'general'; // fallback if Thymeleaf fails
+    fetch('/channel/' + currentChannel + '/messages')
+        .then(response => response.json())
+        .then(messages => {
+            const messageList = document.getElementById('messageList');
+            messageList.innerHTML = ''; // Clear before re-rendering
+            messages.forEach(msg => {
+                const currentUser = sessionStorage.getItem("currentUser");
+                const isSentByCurrentUser = (msg.fromUser === currentUser);
 
-    // Refresh messages every 1 second
-    setInterval(loadMessages, 1000);
+                const columnDiv = document.createElement('div');
+                columnDiv.className = 'message-column ' + (isSentByCurrentUser ? 'sent' : 'received');
+
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'message-bubble ' + (isSentByCurrentUser ? 'sent' : 'received');
+                bubbleDiv.innerHTML = `
+                    <div class="avatar">${msg.fromUser || 'Anonymous'}</div>
+                    <div>${msg.content}</div>
+                    <div class="timestamp">${formatTime(msg.timestamp)}</div>
+                `;
+
+                columnDiv.appendChild(bubbleDiv);
+                messageList.appendChild(columnDiv);
+            });
+            messageList.scrollTop = messageList.scrollHeight; // Scroll to latest message
+        });
+}, 1000);
+
+// Format timestamp nicely
+function formatTime(timestamp) {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    return date.getHours().toString().padStart(2, '0') + ':' +
+           date.getMinutes().toString().padStart(2, '0');
+}
 </script>
 
 </body>
 </html>
-

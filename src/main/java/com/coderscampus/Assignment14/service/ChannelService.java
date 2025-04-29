@@ -1,48 +1,49 @@
 package com.coderscampus.Assignment14.service;
 
-import org.springframework.stereotype.Service;
-import com.coderscampus.domain.Channel;
-import com.coderscampus.domain.Message;
-
-import jakarta.annotation.PostConstruct;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
+import com.coderscampus.domain.Channel;
+import com.coderscampus.domain.Message;
+
+import java.util.*;
+
 @Service
 public class ChannelService {
+    private final Map<String, Channel> channels = new HashMap<>();
 
-    private final Map<String, List<Message>> channelMessages = new HashMap<>();
-
-    @PostConstruct
-    public void initDefaultChannels() {
-        channelMessages.putIfAbsent("General", new ArrayList<>());
-        channelMessages.putIfAbsent("Channel1", new ArrayList<>());
-        channelMessages.putIfAbsent("Channel2", new ArrayList<>());
-        channelMessages.putIfAbsent("Channel3", new ArrayList<>());
-    }
-    
     public List<Channel> getAllChannels() {
-        List<Channel> channels = new ArrayList<>();
-
-        for (String channelName : channelMessages.keySet()) {
-            List<Message> messages = channelMessages.get(channelName);
-            String lastMessageContent = messages.isEmpty() ? "No messages yet..." 
-                                                            : messages.get(messages.size() - 1).getContent();
-            Channel channel = new Channel(channelName, lastMessageContent);
-            channels.add(channel);
-        }
-
-        return channels;
+        return new ArrayList<>(channels.values());
     }
 
-    public List<Message> getMessagesForChannel(String channelName) {
-        return channelMessages.getOrDefault(channelName, new ArrayList<>());
+    public Channel getChannelByName(String name) {
+        return channels.get(name);
+    }
+
+    public void createChannel(String name) {
+        if (!channels.containsKey(name)) {
+            Channel channel = new Channel();
+            channel.setName(name);
+            channel.setMessages(new ArrayList<>());
+            channel.setLastMessage("No messages yet.");
+            channels.put(name, channel);
+        }
     }
 
     public void addMessageToChannel(String channelName, Message message) {
-        channelMessages.computeIfAbsent(channelName, k -> new ArrayList<>()).add(message);
+        Channel channel = channels.get(channelName);
+        if (channel != null) {
+            channel.getMessages().add(message);
+            channel.setLastMessage(message.getContent()); // ✅ Update lastMessage
+        }
+    }
+
+    public List<Message> getMessagesForChannel(String channelName) {
+        Channel channel = channels.get(channelName);
+        return (channel != null) ? channel.getMessages() : Collections.emptyList();
     }
 }

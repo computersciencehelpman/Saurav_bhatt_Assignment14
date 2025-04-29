@@ -1,8 +1,11 @@
 package com.coderscampus.domain;
 
+import java.util.List;
+
 public class Channel {
     private String name;
     private String lastMessage;
+    private List<Message> messages;
 
     public Channel() {
     }
@@ -20,6 +23,14 @@ public class Channel {
         this.name = name;
     }
 
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
     public String getLastMessage() {
         return lastMessage;
     }
@@ -28,4 +39,3 @@ public class Channel {
         this.lastMessage = lastMessage;
     }
 }
-

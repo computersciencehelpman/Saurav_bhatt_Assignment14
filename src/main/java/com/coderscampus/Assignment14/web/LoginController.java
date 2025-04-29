@@ -2,6 +2,7 @@ package com.coderscampus.Assignment14.web;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,10 +31,10 @@ public class LoginController {
         session.setAttribute("username", username);
         return "redirect:/channels";
     }
-    
+
     @PostMapping("/setSessionUser")
     @ResponseBody
-    public void setSessionUser(@RequestBody Map<String, String> payload, HttpSession session) {
+    public ResponseEntity<Void> setSessionUser(@RequestBody Map<String, String> payload, HttpSession session) {
         String username = payload.get("username");
         if (username != null && !username.trim().isEmpty()) {
             username = username.trim();
@@ -43,8 +44,6 @@ public class LoginController {
                 userRepo.addUser(username);
             }
         }
-
+        return ResponseEntity.ok().build(); // ✅ Proper 200 OK response
     }
-
-
 }

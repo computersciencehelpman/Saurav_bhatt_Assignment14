@@ -1,8 +1,6 @@
 package com.coderscampus.Assignment14.web;
 
-import com.coderscampus.Assignment14.service.ChannelService; // You might need to create this service if it doesn't exist
-import com.coderscampus.domain.Channel; // Make sure you have a Channel class
-import com.coderscampus.domain.Message;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import jakarta.servlet.http.HttpSession; 
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.coderscampus.Assignment14.service.ChannelService; // You might need to create this service if it doesn't exist
+import com.coderscampus.domain.Channel; // Make sure you have a Channel class
+import com.coderscampus.domain.Message;
 
-import java.util.List;
-
+import jakarta.servlet.http.HttpSession;
 @Controller
 public class ChannelController {
 
@@ -24,36 +24,57 @@ public class ChannelController {
         this.channelService = channelService;
     }
 
-    @GetMapping("/channels")
-    public String channelList(Model model) {
+    @GetMapping("/")
+    public String welcome() {
+        return "welcome";
+    }
+
+    @GetMapping("/general")
+    public String general(Model model) {
         List<Channel> channels = channelService.getAllChannels();
         model.addAttribute("channels", channels);
-        return "general"; 
+        return "general";
     }
-    
-    @GetMapping("/channels/{channelName}")
-    public String openChannel(@PathVariable String channelName, Model model) {
-        List<Message> messages = channelService.getMessagesForChannel(channelName);
-        model.addAttribute("channelName", channelName);
-        model.addAttribute("messages", messages);
+
+    // 🚀 Add this missing endpoint!
+    @GetMapping("/channels")
+    public String showChannels(Model model) {
+        List<Channel> channels = channelService.getAllChannels();
+        model.addAttribute("channels", channels);
+        return "general"; // or "channels" if you later make a channels.html
+    }
+
+    @PostMapping("/create-channel")
+    public String createChannel(@RequestParam String name, Model model) {
+        channelService.createChannel(name);
+        return "redirect:/general";
+    }
+
+    @GetMapping("/channel/{name}")
+    public String channel(@PathVariable String name, Model model) {
+        Channel channel = channelService.getChannelByName(name);
+        if (channel == null) {
+            return "redirect:/general";
+        }
+        model.addAttribute("channel", channel);
         return "channel";
     }
 
-    @GetMapping("/channels/{channelName}/messages")
-    public String loadMessages(@PathVariable String channelName, Model model) {
-        List<Message> messages = channelService.getMessagesForChannel(channelName);
-        model.addAttribute("messages", messages);
-        return "fragments/messages :: messagesList"; // We'll make a small fragment next!
+    @PostMapping("/channel/{name}/send")
+    public String sendMessage(@PathVariable String name, @RequestParam String content, Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            username = "anonymous";
+        }
+        Message newMessage = new Message(content, username, "");
+        channelService.addMessageToChannel(name, newMessage);
+
+        return "redirect:/channel/" + name;
     }
 
-    @PostMapping("/channels/{channelName}/send")
-    public String sendMessage(@PathVariable String channelName, @RequestParam String content, HttpSession session) {
-        String sender = (String) session.getAttribute("username");
-        channelService.addMessageToChannel(channelName, new Message(sender, content));
-        return "redirect:/channels/" + channelName;
+    @GetMapping("/channel/{name}/messages")
+    @ResponseBody
+    public List<Message> getMessages(@PathVariable String name) {
+        return channelService.getMessagesForChannel(name);
     }
-
-
-    
 }
-
