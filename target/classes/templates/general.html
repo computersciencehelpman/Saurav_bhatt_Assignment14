@@ -21,7 +21,6 @@
             align-items: center;
             font-size: 2rem;
             font-weight: bold;
-            position: relative;
         }
 
         .add-button {
@@ -86,17 +85,31 @@
 
         .channel-text {
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .channel-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .channel-name {
             font-size: 1.2rem;
             font-weight: bold;
-            margin-bottom: 0.3rem;
         }
 
         .channel-last-message {
             font-size: 0.9rem;
             color: #777;
+        }
+
+        .channel-last-time {
+            font-size: 0.8rem;
+            color: #aaa;
+            white-space: nowrap;
         }
 
         /* Modal CSS */
@@ -154,7 +167,10 @@
                     <span th:text="${#strings.substring(channel.name, 0, 1)}">C</span>
                 </div>
                 <div class="channel-text">
-                    <div class="channel-name" th:text="${channel.name}">Channel Name</div>
+                    <div class="channel-top-row">
+                        <div class="channel-name" th:text="${channel.name}">Channel Name</div>
+                        <div class="channel-last-time" th:if="${channel.lastMessageTime != null}" th:text="${#temporals.format(channel.lastMessageTime, 'hh:mm a')}">Time</div>
+                    </div>
                     <div class="channel-last-message" th:text="${channel.lastMessage}">Last message preview...</div>
                 </div>
             </a>

@@ -63,6 +63,7 @@ public class ChannelService {
         if (channel != null) {
             channel.getMessages().add(message);
             channel.setLastMessage(message.getContent());
+            channel.setLastMessageTime(message.getTimestamp()); 
         }
     }
 
