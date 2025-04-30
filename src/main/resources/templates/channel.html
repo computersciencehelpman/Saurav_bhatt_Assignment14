@@ -1,67 +1,186 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title th:text="'Channel - ' + ${channel.name}">Channel</title>
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <title th:text="'Channel - ' + ${channel.name}">Channel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #4A90E2;
+      color: white;
+      padding: 10px;
+      font-size: 1.5rem;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .message-display {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px;
+      height: 70vh;
+      overflow-y: auto;
+      background: #f1f1f1;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .message-column {
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .message-column.sent {
+      justify-content: flex-end;
+    }
+
+    .message-column.received {
+      justify-content: flex-start;
+    }
+
+    .message-bubble {
+      max-width: 60%;
+      padding: 12px;
+      border-radius: 18px;
+      word-wrap: break-word;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .message-bubble.sent {
+      background-color: #007aff;
+      color: white;
+      align-items: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-bubble.received {
+      background-color: #e5e5ea;
+      color: black;
+      align-items: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .timestamp {
+      font-size: 0.75rem;
+      margin-top: 4px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .message-bubble.received .timestamp {
+      color: #666;
+    }
+
+    .avatar {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #007aff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005bb5;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1 th:text="${channel.name}">Channel Name</h1>
-    </div>
+  <div class="header" th:text="${channel.name}">Channel Name</div>
 
-    <!-- Message List -->
-    <div id="messageList" class="message-display">
-        <!-- Messages will be dynamically loaded here -->
-    </div>
+  <div id="messageList" class="message-display"></div>
 
-    <!-- Send Message Form -->
-    <form id="sendMessageForm" method="post" th:action="@{'/channel/' + ${channel.name} + '/send'}">
-        <input type="text" name="content" placeholder="Type your message..." required>
-        <button type="submit">Send</button>
-    </form>
+  <form id="sendMessageForm" method="post" th:action="@{'/channel/' + ${channel.name} + '/send'}" class="chat-input">
+    <input type="text" name="content" placeholder="Type your message..." required />
+    <button type="submit">Send</button>
+  </form>
 </div>
 
 <script>
-// Load messages every second
-setInterval(function() {
-    const currentChannel = /*[[${channel.name}]]*/ 'general'; // fallback if Thymeleaf fails
+  setInterval(function () {
+    const currentChannel = /*[[${channel.name}]]*/ 'general';
     fetch('/channel/' + currentChannel + '/messages')
-        .then(response => response.json())
-        .then(messages => {
-            const messageList = document.getElementById('messageList');
-            messageList.innerHTML = ''; // Clear before re-rendering
-            messages.forEach(msg => {
-                const currentUser = sessionStorage.getItem("currentUser");
-                const isSentByCurrentUser = (msg.fromUser === currentUser);
+      .then(response => response.json())
+      .then(messages => {
+        const messageList = document.getElementById('messageList');
+        messageList.innerHTML = '';
+        const currentUser = sessionStorage.getItem("currentUser");
 
-                const columnDiv = document.createElement('div');
-                columnDiv.className = 'message-column ' + (isSentByCurrentUser ? 'sent' : 'received');
+        messages.forEach(msg => {
+          const isSentByCurrentUser = (msg.fromUser === currentUser);
+          const wrapper = document.createElement('div');
+          wrapper.className = 'message-column ' + (isSentByCurrentUser ? 'sent' : 'received');
 
-                const bubbleDiv = document.createElement('div');
-                bubbleDiv.className = 'message-bubble ' + (isSentByCurrentUser ? 'sent' : 'received');
-                bubbleDiv.innerHTML = `
-                    <div class="avatar">${msg.fromUser || 'Anonymous'}</div>
-                    <div>${msg.content}</div>
-                    <div class="timestamp">${formatTime(msg.timestamp)}</div>
-                `;
+          const bubble = document.createElement('div');
+          bubble.className = 'message-bubble ' + (isSentByCurrentUser ? 'sent' : 'received');
 
-                columnDiv.appendChild(bubbleDiv);
-                messageList.appendChild(columnDiv);
-            });
-            messageList.scrollTop = messageList.scrollHeight; // Scroll to latest message
+          const avatar = document.createElement('div');
+          avatar.className = 'avatar';
+          avatar.textContent = msg.fromUser;
+
+          const text = document.createElement('div');
+          text.textContent = msg.content;
+
+          const timestamp = document.createElement('div');
+          timestamp.className = 'timestamp';
+          timestamp.textContent = formatTime(msg.timestamp);
+
+          if (!isSentByCurrentUser) bubble.appendChild(avatar);
+          bubble.appendChild(text);
+          bubble.appendChild(timestamp);
+          wrapper.appendChild(bubble);
+
+          messageList.appendChild(wrapper);
         });
-}, 1000);
 
-// Format timestamp nicely
-function formatTime(timestamp) {
+        messageList.scrollTop = messageList.scrollHeight;
+      });
+  }, 1000);
+
+  function formatTime(timestamp) {
     if (!timestamp) return "";
     const date = new Date(timestamp);
-    return date.getHours().toString().padStart(2, '0') + ':' +
-           date.getMinutes().toString().padStart(2, '0');
-}
+    return date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 </script>
 
 </body>
