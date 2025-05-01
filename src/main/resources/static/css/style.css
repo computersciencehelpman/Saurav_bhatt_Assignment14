@@ -1,145 +1,137 @@
-<style>
-/* Message Display Area */
+/* ========== Chat Message Display Area ========== */
 .message-display {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 15px;
-    overflow-y: auto;
-    height: 80vh;
-    background: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px;
+  overflow-y: auto;
+  height: 80vh;
+  background: #f1f1f1;
 }
 
-/* Message container alignment */
+/* ========== Message Alignment ========== */
 .message-column {
-    display: flex;
-    align-items: flex-end;
+  display: flex;
+  align-items: flex-end;
 }
 
 .message-column.sent {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .message-column.received {
-    justify-content: flex-start;
+  justify-content: flex-start;
 }
 
-/* Message bubble */
+/* ========== Message Bubbles ========== */
 .message-bubble {
-    max-width: 65%;
-    padding: 10px 14px;
-    border-radius: 20px;
-    word-wrap: break-word;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 65%;
+  padding: 10px 14px;
+  border-radius: 20px;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .message-bubble.sent {
-    background-color: #007aff; /* iMessage blue */
-    color: white;
-    border-bottom-right-radius: 4px;
+  background-color: #007aff;
+  color: white;
+  border-bottom-right-radius: 4px;
 }
 
 .message-bubble.received {
-    background-color: #e5e5ea; /* iMessage gray */
-    color: black;
-    border-bottom-left-radius: 4px;
+  background-color: #e5e5ea;
+  color: black;
+  border-bottom-left-radius: 4px;
 }
 
+/* ========== Timestamp Styling ========== */
 .timestamp {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.7);
-    align-self: flex-end;
-}
-
-.date-header {
-    text-align: center;
-    color: #666;
-    font-size: 13px;
-    font-weight: bold;
-    margin: 15px 0 5px;
-    padding: 4px 10px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    display: inline-block;
+  font-size: 0.75rem;
+  align-self: flex-end;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .message-bubble.received .timestamp {
-    color: #666;
+  color: #666;
 }
 
+/* ========== Avatar ========== */
 .avatar {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #333;
-    margin: 0 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0 8px;
 }
 
-.bubble.sent .avatar {
-    margin-left: auto;
+/* ========== Date Divider Header ========== */
+.date-header {
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 15px 0 5px;
+  padding: 4px 10px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  display: inline-block;
 }
 
-.bubble.received .avatar {
-    margin-right: auto;
-}
-
-/* Chat Input Box */
+/* ========== Chat Input Box ========== */
 .chat-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #f1f1f1;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f1f1f1;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
 }
 
 textarea {
-    width: 50%;
-    min-height: 40px;
-    max-height: 150px;
-    overflow: hidden;
-    resize: none;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  width: 50%;
+  min-height: 40px;
+  max-height: 150px;
+  overflow: hidden;
+  resize: none;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 button {
-    border: none;
-    background: none;
-    cursor: pointer;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
 i {
-    font-size: 24px;
-    color: #007bff;
+  font-size: 24px;
+  color: #007bff;
 }
 
-/* Channel Navigation */
 .channel-nav {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
 .channel-nav button {
-    padding: 8px 16px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .channel-nav button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
-</style>
