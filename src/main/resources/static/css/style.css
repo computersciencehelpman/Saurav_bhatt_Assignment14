@@ -1,4 +1,3 @@
-/* ========== Chat Message Display Area ========== */
 .message-display {
   display: flex;
   flex-direction: column;
@@ -9,7 +8,6 @@
   background: #f1f1f1;
 }
 
-/* ========== Message Alignment ========== */
 .message-column {
   display: flex;
   align-items: flex-end;
@@ -23,7 +21,6 @@
   justify-content: flex-start;
 }
 
-/* ========== Message Bubbles ========== */
 .message-bubble {
   max-width: 65%;
   padding: 10px 14px;
@@ -47,7 +44,6 @@
   border-bottom-left-radius: 4px;
 }
 
-/* ========== Timestamp Styling ========== */
 .timestamp {
   font-size: 0.75rem;
   align-self: flex-end;
@@ -58,7 +54,7 @@
   color: #666;
 }
 
-/* ========== Avatar ========== */
+
 .avatar {
   font-size: 0.8rem;
   font-weight: bold;
@@ -66,7 +62,6 @@
   margin: 0 8px;
 }
 
-/* ========== Date Divider Header ========== */
 .date-header {
   text-align: center;
   color: #666;
@@ -79,7 +74,6 @@
   display: inline-block;
 }
 
-/* ========== Chat Input Box ========== */
 .chat-container {
   position: fixed;
   bottom: 0;

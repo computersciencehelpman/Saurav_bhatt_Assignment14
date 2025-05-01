@@ -102,11 +102,9 @@
       return;
     }
 
-    // Disable input and button
     userNameInput.disabled = true;
     submitButton.disabled = true;
 
-    // 🔥 Insert spinner nicely
     submitButton.innerHTML = `<div class="spinner"></div>Entering...`;
 
     sessionStorage.setItem("currentUser", userName);
@@ -126,7 +124,6 @@
       console.error("Error setting session user:", error);
       alert("Something went wrong. Please try again.");
 
-      // Re-enable if error
       userNameInput.disabled = false;
       submitButton.disabled = false;
       submitButton.innerHTML = "Enter Chat";
