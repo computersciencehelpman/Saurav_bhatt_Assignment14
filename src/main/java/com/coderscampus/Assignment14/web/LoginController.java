@@ -44,6 +44,6 @@ public class LoginController {
                 userRepo.addUser(username);
             }
         }
-        return ResponseEntity.ok().build(); // ✅ Proper 200 OK response
+        return ResponseEntity.ok().build();
     }
 }

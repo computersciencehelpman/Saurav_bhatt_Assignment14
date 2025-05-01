@@ -31,14 +31,14 @@ public class MessageController {
     public ResponseEntity<Void> sendMessage(@PathVariable String channel, @RequestBody Map<String, String> payload) {
         String text = payload.get("text");
         String fromUser = payload.get("fromUser");
-        String toUser = payload.getOrDefault("toUser", ""); // Optional receiver
+        String toUser = payload.getOrDefault("toUser", ""); 
 
         if (fromUser == null || fromUser.isEmpty()) {
             fromUser = "anonymous";
         }
 
         messageService.addMessage(channel, text, fromUser, toUser);
-        return ResponseEntity.ok().build(); // ✅ Explicitly respond 200 OK
+        return ResponseEntity.ok().build(); 
     }
 
     @GetMapping("/all/{channel}")
@@ -49,9 +49,9 @@ public class MessageController {
         List<Message> messages = messageService.getMessages(channel);
         if (messages == null) {
             System.out.println("No messages found for channel: " + channel);
-            messages = new ArrayList<>(); // Empty list if nothing
+            messages = new ArrayList<>(); 
         }
 
-        return ResponseEntity.ok().body(messages); // ✅ Properly return messages as JSON
+        return ResponseEntity.ok().body(messages);
     }
 }

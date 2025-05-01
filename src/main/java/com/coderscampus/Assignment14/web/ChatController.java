@@ -14,7 +14,6 @@ public class ChatController {
 
     private final MessageService messageService;
 
-    // Constructor injection for MessageService
     public ChatController(MessageService messageService) {
         this.messageService = messageService;
     }
@@ -32,7 +31,7 @@ public class ChatController {
 
         model.addAttribute("channel", channel);
         model.addAttribute("username", username);
-        model.addAttribute("messages", messageService.getMessages(channel)); // <-- fixed this line
+        model.addAttribute("messages", messageService.getMessages(channel)); 
         return "channel";
     }
 

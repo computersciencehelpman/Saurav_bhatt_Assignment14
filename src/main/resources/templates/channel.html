@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title th:text="${channel.name}">Chat Channel</title>
+  <title th:text="'Chat - ' + ${channel.name}">Chat Channel</title>
 
   <link rel="stylesheet" href="/css/style.css" />
   <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
-  <style>
+   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
@@ -127,10 +127,10 @@
     <button id="sendButton"><i class="fa-solid fa-arrow-up"></i></button>
   </div>
 
-  <input type="hidden" id="channel" th:value="${channel}" />
+  <!-- Store the channel name properly -->
+  <input type="hidden" id="channel" th:value="${channel.name}" />
   <p id="currentUserDisplay" style="text-align:center;"></p>
 
-  <!-- Inline JavaScript for simplicity -->
   <script>
     async function showAlertPrompt() {
       return new Promise(resolve => {
@@ -143,10 +143,7 @@
     function formatTime(timestamp) {
       if (!timestamp) return "";
       const date = new Date(timestamp);
-      return date.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     async function loadMessages() {
@@ -201,8 +198,8 @@
       const messageBox = document.getElementById("messageBox");
       const currentUser = sessionStorage.getItem("currentUser");
       const currentChannel = document.getElementById("channel").value;
-
       const message = messageBox.value.trim();
+
       if (!message) return;
 
       const payload = {
@@ -213,9 +210,7 @@
 
       await fetch(`/messages/send/${currentChannel}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
 
@@ -241,7 +236,7 @@
       });
 
       loadMessages();
-      setInterval(loadMessages, 1000);
+      setInterval(loadMessages, 1000); // Poll every 1 second
     });
   </script>
 </body>

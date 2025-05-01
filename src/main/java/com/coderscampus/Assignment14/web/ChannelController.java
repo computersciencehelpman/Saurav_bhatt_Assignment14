@@ -36,12 +36,11 @@ public class ChannelController {
         return "general";
     }
 
-    // 🚀 Add this missing endpoint!
     @GetMapping("/channels")
     public String showChannels(Model model) {
         List<Channel> channels = channelService.getAllChannels();
         model.addAttribute("channels", channels);
-        return "general"; // or "channels" if you later make a channels.html
+        return "general"; 
     }
 
     @PostMapping("/create-channel")

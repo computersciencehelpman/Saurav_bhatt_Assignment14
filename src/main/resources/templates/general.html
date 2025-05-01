@@ -112,7 +112,6 @@
             white-space: nowrap;
         }
 
-        /* Modal CSS */
         .modal {
             display: none;
             position: fixed;
@@ -153,13 +152,11 @@
 
 <body>
 
-    <!-- Header with "+" button -->
     <div class="header">
         <span>Channels</span>
         <button class="add-button" onclick="openModal()">+</button>
     </div>
 
-    <!-- Channel list -->
     <ul class="channel-list">
         <li class="channel-item" th:each="channel : ${channels}">
             <a class="channel-link" th:href="@{'/channel/' + ${channel.name}}">
@@ -177,7 +174,6 @@
         </li>
     </ul>
 
-    <!-- Popup Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>

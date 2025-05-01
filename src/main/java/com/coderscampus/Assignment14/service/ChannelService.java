@@ -31,14 +31,14 @@ public class ChannelService {
             LocalDateTime t1 = getLatestTimestamp(c1);
             LocalDateTime t2 = getLatestTimestamp(c2);
             
-            return t2.compareTo(t1); // Newer channels first
+            return t2.compareTo(t1); 
         });
         
         return sortedChannels;
     }
     private LocalDateTime getLatestTimestamp(Channel channel) {
         if (channel.getMessages() == null || channel.getMessages().isEmpty()) {
-            return LocalDateTime.MIN; // If no messages, treat as very old
+            return LocalDateTime.MIN; 
         }
         return channel.getMessages()
                       .get(channel.getMessages().size() - 1)
