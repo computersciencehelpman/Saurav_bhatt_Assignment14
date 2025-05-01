@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title th:text="'Chat - ' + ${channel}">Chat Channel</title>
+  <title th:text="${channel.name}">Chat Channel</title>
 
   <link rel="stylesheet" href="/css/style.css" />
   <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
@@ -116,7 +116,7 @@
 <body>
 
   <!-- Chat Header -->
-  <div class="header" th:text="${channel}">Channel Name</div>
+  <div class="header" th:text="${channel.name}">Channel Name</div>
 
   <!-- Message Display Area -->
   <div id="messageDisplay" class="message-display"></div>
