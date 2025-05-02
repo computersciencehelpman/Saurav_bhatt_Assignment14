@@ -3,80 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Welcome - Assignment14</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #6dd5ed, #2193b0);
-    }
-
-    .welcome-container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      width: 300px;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
-      font-size: 16px;
-    }
-
-    button {
-      background-color: #2193b0;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    button:hover {
-      background-color: #176e87;
-    }
-
-    button:disabled {
-      background-color: #a0c4d6;
-      cursor: not-allowed;
-      transform: scale(0.97);
-    }
-
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid #f3f3f3;
-      border-top: 2px solid #ffffff;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
+  <script src="https://kit.fontawesome.com/41b6507016.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/css/welcome.css" />
+  
 </head>
 <body>
 
@@ -90,46 +19,8 @@
   </form>
 </div>
 
-<script>
-  document.getElementById("welcomeForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
-    const userNameInput = document.getElementById("username");
-    const userName = userNameInput.value.trim();
-    const submitButton = document.getElementById("submitBtn");
 
-    if (!userName) {
-      alert("Please enter your name");
-      return;
-    }
-
-    userNameInput.disabled = true;
-    submitButton.disabled = true;
-
-    submitButton.innerHTML = `<div class="spinner"></div>Entering...`;
-
-    sessionStorage.setItem("currentUser", userName);
-
-    try {
-      await fetch("/setSessionUser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: userName })
-      });
-
-      setTimeout(() => {
-        window.location.href = "/channels";
-      }, 400);
-
-    } catch (error) {
-      console.error("Error setting session user:", error);
-      alert("Something went wrong. Please try again.");
-
-      userNameInput.disabled = false;
-      submitButton.disabled = false;
-      submitButton.innerHTML = "Enter Chat";
-    }
-  });
-</script>
-
+ <script src="/js/welcome.js"></script>
+ 
 </body>
 </html>

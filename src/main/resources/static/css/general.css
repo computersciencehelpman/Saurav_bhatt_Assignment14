@@ -1,94 +1,143 @@
-<style>
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f2f2f7;
-        }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: white;
-            min-height: 100vh;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
         }
 
         .header {
-            padding: 20px;
-            font-size: 24px;
+            background-color: #4A90E2;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 2rem;
             font-weight: bold;
-            border-bottom: 1px solid #ddd;
         }
 
-		.channel-item:hover {
-  			background-color: #f0f0f0;
-  			transition: background-color 0.2s ease;
-		}
-		
+        .add-button {
+            background-color: white;
+            color: #4A90E2;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .add-button:hover {
+            background-color: #e1eaff;
+            transform: scale(1.1);
+        }
+
         .channel-list {
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin: 2rem auto;
+            max-width: 600px;
         }
 
         .channel-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .channel-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .channel-link {
+            text-decoration: none;
+            color: inherit;
             display: flex;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
+            padding: 1rem;
         }
 
         .channel-icon {
+            background-color: #4A90E2;
+            color: white;
+            border-radius: 50%;
             width: 50px;
             height: 50px;
-            background-color: #ccc;
-            border-radius: 50%;
-            margin-right: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
+            font-size: 1.5rem;
+            margin-right: 1rem;
             flex-shrink: 0;
         }
 
         .channel-text {
             flex-grow: 1;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .channel-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .channel-name {
+            font-size: 1.2rem;
             font-weight: bold;
-            font-size: 16px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .channel-last-message {
-            font-size: 14px;
-            color: #666;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 4px;
+            font-size: 0.9rem;
+            color: #777;
         }
-        
-        .spinner {
-    		border: 2px solid #f3f3f3; 
-    		border-top: 2px solid #2193b0; 
-    		border-radius: 50%;
-    		width: 16px;
-    		height: 16px;
-    		animation: spin 0.8s linear infinite;
-    		display: inline-block;
-    		vertical-align: middle;
-    		margin-right: 8px;
-		}
 
-		@keyframes spin {
-    		0% { transform: rotate(0deg); }
-    		100% { transform: rotate(360deg); }
-		}    
-</style>
+        .channel-last-time {
+            font-size: 0.8rem;
+            color: #aaa;
+            white-space: nowrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
